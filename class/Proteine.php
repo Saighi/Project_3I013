@@ -19,7 +19,6 @@ class Proteine
 	
     private function setId($id)
     {
-		int_ok($id);
         $this->id = $id;
     }
 	
@@ -42,16 +41,17 @@ class Proteine
 
 
     
-    private function addDomain($domain)
+    public function addDomain($domain)
     {
 		domain_ok($domain);
-		domain_taille_ok($domain,$taille);
-        $this->$domains[] = $domain;
+		domain_taille_ok($domain,$this->taille);
+        ($this->domains)[] = $domain;
+		
     }
     
     public function getDomains()
     {
-        return $domain;
+        return $this->domains;
     }
 
     
