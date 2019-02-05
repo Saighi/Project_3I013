@@ -41,8 +41,6 @@ foreach($buffer as $i){
 		$proteine->addDomain($domain);
 	}
 	$tableau_de_prot[]=$proteine;
-
-
 }
 
 foreach ($tableau_de_prot as $prot){

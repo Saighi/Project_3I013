@@ -12,7 +12,7 @@ abstract class SVG {
 		
 		$svg='<svg height="50" width="'.$svgWidth.'">
 		<line x1="0" y1="20" x2="'.$length.'" y2="20" style="stroke:black;stroke-width:2"/>';
-		foreach($proteine->getDomains() as $key => $domain) {
+		foreach((array)$proteine->getDomains() as $key => $domain) {
 			$color=substr($domain->getId(),2);
 			$color.='0';
 			$color= '#'.$color;
