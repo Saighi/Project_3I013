@@ -1,5 +1,6 @@
 <?php
 require_once ('Tools.php');
+$tableau_de_prot=[];
 $proteine = new Proteine(['id' => 'Agaricus_bisporus_XP_006461865.1',
 	'taille' => 2500]);
 	
@@ -56,5 +57,58 @@ $domain = new Domain(['id' => 'PF00350',
 $proteine->addDomain($domain);
 
 
-SVG::show($proteine);
+$buffer=[];
+/*Ouverture du fichier en lecture seule*/
+$handle = fopen('fichier_proteines.txt', 'r');
+/*Si on a réussi à ouvrir le fichier*/
+if ($handle)
+{
+	/*Tant que l'on est pas à la fin du fichier*/
+	while (!feof($handle))
+	{
+		/*On lit la ligne courante*/
+		$buffer[]= preg_split("@(\s)+@",fgets($handle));
+		if ($buffer[sizeof($buffer)-1][sizeof($buffer[sizeof($buffer)-1])-1]==""){
+			unset($buffer[sizeof($buffer)-1][sizeof($buffer[sizeof($buffer)-1])-1]);
+		}
+		
+		/*On l'affiche*/
+	}
+	
+	/*On ferme le fichier*/
+	fclose($handle);
+}
+$contenant=[];
+foreach($buffer as $i){
+	//echo "'id' =>".$i[0];
+	//echo " taille =>".$i[1];
+	$proteine = new Proteine(['id' => $i[0],
+	'taille' => $i[1]]);
+	
+	for($j=2; $j<sizeof($i);$j+=4){
+		//echo " 'id' =>".$i[$j];
+		//echo " confiance =>".$i[$j+1];
+		//echo " 'first' =>".$i[$j+2];
+		//echo " 'last' =>".(int)$i[$j+3];
+		$domain = new Domain(['id' => $i[$j],
+		'confiance' => $i[$j+1],
+		'first' => $i[$j+2],
+		'last' => $i[$j+3]]);
+		$proteine->addDomain($domain);
+	}
+	$tableau_de_prot[]=$proteine;
+
+
+}
+
+foreach($contenant as $t){
+	foreach($t as $k => $v){
+		echo "/".$k."=>".$v;
+	}
+	echo "///";
+}
+
+foreach ($tableau_de_prot as $prot){
+	SVG::show($prot);}
 	?>
+
