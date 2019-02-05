@@ -53,6 +53,8 @@ foreach($contenant as $t){
 }
 
 foreach ($tableau_de_prot as $prot){
-	SVG::show($prot);}
+	SVG::show($prot);
+	echo '<br />';
+	}
 	?>
 
