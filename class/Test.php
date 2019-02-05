@@ -11,10 +11,10 @@ if ($handle)
 	while (!feof($handle))
 	{
 		/*On lit la ligne courante*/
-		$buffer[]= preg_split("@(\s)+@",fgets($handle));
-		if ($buffer[sizeof($buffer)-1][sizeof($buffer[sizeof($buffer)-1])-1]==""){
+		$buffer[]= preg_split("@(\s)+@",trim(fgets($handle)));
+		/*if ($buffer[sizeof($buffer)-1][sizeof($buffer[sizeof($buffer)-1])-1]==""){
 			unset($buffer[sizeof($buffer)-1][sizeof($buffer[sizeof($buffer)-1])-1]);
-		}
+		}*/
 		
 		/*On l'affiche*/
 	}
