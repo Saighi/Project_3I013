@@ -17,7 +17,7 @@ abstract class SVG {
 			$color.='0';
 			$color= '#'.$color;
 			
-			$svg.='<rect x="'.$domain->getFirst().'" y="0" width="'.($domain->getLast() - $domain->getFirst()).'" height="40" rx="15" style="fill:'.$color.'"/>';
+			$svg.='<rect x="'.$domain->getFirst().'" y="0" width="'.($domain->getLast() - $domain->getFirst()).'" height="40" rx="15" style="fill:'.$color.';stroke:black;stroke-width:2"/>';
             //x domaine commence
             //width (domaine fini - domaine commence)
 		}
