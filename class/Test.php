@@ -45,13 +45,6 @@ foreach($buffer as $i){
 
 }
 
-foreach($contenant as $t){
-	foreach($t as $k => $v){
-		echo "/".$k."=>".$v;
-	}
-	echo "///";
-}
-
 foreach ($tableau_de_prot as $prot){
 	SVG::show($prot);}
 	?>
