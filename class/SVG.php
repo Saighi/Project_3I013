@@ -10,7 +10,7 @@ abstract class SVG {
 		$svgWidth=$proteine->getTaille()+10;
 		$length=$proteine->getTaille();
 		
-		$svg='<svg height="50" width="'.$svgWidth.'">
+		$svg='<div><h4>.'.$proteine->getId().'</h3><br/><svg height="50" width="'.$svgWidth.'">
 		<line x1="0" y1="20" x2="'.$length.'" y2="20" style="stroke:black;stroke-width:2"/>';
 		foreach($proteine->getDomains() as $key => $domain) {
 			$color=substr($domain->getId(),2);
@@ -22,7 +22,7 @@ abstract class SVG {
             //width (domaine fini - domaine commence)
 		}
 		
-		$svg.='</svg><br/>';
+		$svg.='</svg></div><br/><br />';
 		echo $svg;
 	}
 	
