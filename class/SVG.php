@@ -13,7 +13,7 @@ abstract class SVG {
 		$svg='<div><h4>.'.$proteine->getId().'</h3><br/><svg height="60" width="'.$svgWidth.'">
 		<line x1="10" y1="30" x2="'.($svgWidth-10 ).'" y2="30" style="stroke:black;stroke-width:2"/>';
 		$svg.="<rect width='".$svgWidth."' height='60' style='fill:rgb(0,0,0);stroke-width:3' fill-opacity='0.2'/>";
-		for ($i=200;$i<$length;$i+=150){
+		for ($i=150;$i<$length;$i+=150){
 			$svg.='<line x1="'.(($i*$svgWidth)/$length).'" y1="0" x2="'.(($i*$svgWidth)/$length).'" y2="60" stroke="black" stroke-width="3" stroke-dasharray="5,5"/>';
 		}
 		foreach($proteine->getDomains() as $key => $domain) {
