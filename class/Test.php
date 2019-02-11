@@ -13,7 +13,7 @@ if (isset($_FILES["fichier"])) {
 	}*/
 
 	foreach ($proteins->getListOfProteins() as $prot){
-		SVG::show($prot);
+		SVG::show($prot,false);
 		}
 
 	
@@ -34,7 +34,7 @@ if (isset($_FILES["fichier"])) {
 	
 	$title="hello";
 	
-	$body =  "<body>\n$title" . 
+	$body =  "<body>" . 
 				"<form action='Test.php' method='post' enctype='multipart/form-data'><fieldset>\n" .
 				"<label for id='nom'>Rentrez votre fichier ;) : </label>\n" .
 				"<input type ='file' id='fichier' name='fichier' />\n" .
