@@ -15,14 +15,9 @@ abstract class SVG
 		$length = $proteine->getTaille();
 
 		if ($miseAEchelle) {
-			$taille = $length + 10;
-			$domainFirst = ($domain->getFirst() * $svgWidth) / $length;
-			$domainLast = ($domain->getLast() * $svgWidth) / $length;
-
-		} else {
 			$taille = $svgWidth;
-			$domainFirst = $domain->getFirst();
-			$domainLast = $domain->getLast();
+		} else {
+			$taille = $length + 10;
 		}
 
 		$svg = '<div><h4>.' . $proteine->getId() . '</h3><br/><svg height="60" width="' . $taille . '">
@@ -36,6 +31,13 @@ abstract class SVG
 		}
 
 		foreach ($proteine->getDomains() as $key => $domain) {
+			if ($miseAEchelle) {
+				$domainFirst = ($domain->getFirst() * $svgWidth) / $length;
+				$domainLast = ($domain->getLast() * $svgWidth) / $length;
+			}else{
+				$domainFirst = $domain->getFirst();
+				$domainLast = $domain->getLast();
+			}
 			$color = substr($domain->getId(), 2);
 			$color .= '0';
 			$color = '#' . $color;
