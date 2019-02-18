@@ -61,7 +61,7 @@ class ConverterfromTxt{
 			fclose($handle);
 		}
 		foreach($arrayDomSumNb as $id => $arraySumNb) {
-			$this->domainParts[$id]['nbParts']=round($arraySumNb['sum']/round($arraySumNb['sum']/$arraySumNb['nb']));
+			$this->domainParts[$id]['nbParts']=round(round($arraySumNb['sum']/$arraySumNb['nb'])/$arraySumNb['sum'])+1;
 			$this->domainParts[$id]['random']=rand(1,148);
 		}
 		//var_dump($domainParts);
