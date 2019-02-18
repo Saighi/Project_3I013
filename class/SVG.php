@@ -7,7 +7,7 @@ abstract class SVG
 	{
 	}
 
-	public static function show($proteine, $miseAEchelle)
+	public static function show($proteine, $domainParts, $miseAEchelle)
 	{
 		proteine_ok($proteine);
 
@@ -38,14 +38,27 @@ abstract class SVG
 				$domainFirst = $domain->getFirst();
 				$domainLast = $domain->getLast();
 			}
+						$colorFile = file ('colors.txt');
+
 			$color = substr($domain->getId(), 2);
 			$color .= '0';
-			$color = '#' . $color;
+			$color = $colorFile[($domainParts[$domain->getID()]['random']*$color)%148];
+			
+			$lengthDomain = ($domainLast - $domainFirst);
+			$nbPart=$domainParts[$domain->getID()]['nbParts'];
 
 			$svg .= '<rect x="' . $domainFirst
-				. '" y="15" width="' . ($domainLast - $domainFirst)
-				. '" height="30" rx="15" style="fill:' . $color . ';stroke:black;stroke-width:2"><title>' . $domain->getId()
-				. '</title></rect>';
+					. '" y="0" width="' . $lengthDomain
+					. '" height="60" style="fill:' . ($color) . ';stroke:black;stroke-width:0.5;fill-opacity: .5"></rect>';
+					
+		
+			for($i=0;$i<$nbPart;$i++) {
+				$svg .= '<rect x="' . ($domainFirst+($lengthDomain/$nbPart)*$i)
+					. '" y="15" width="' . ($lengthDomain/$nbPart)
+					. '" height="30" rx="5" style="fill:' . $colorFile[(substr($domain->getId(), 2)*($i+1)*$domainParts[$domain->getID()]['random'])%148] . ';stroke:black;stroke-width:2"><title>' . $domain->getId()
+					. '</title></rect>';
+			}
+			
             //x domaine commence
             //width (domaine fini - domaine commence)
 		}

@@ -5,24 +5,24 @@ if (isset($_FILES["fichier"])) {
 	$tmp_name = $_FILES["fichier"]["tmp_name"];
 	$name = $_FILES["fichier"]["name"];
 	move_uploaded_file($name, $tmp_name);
-	$proteins = new ConverterfromTxt($_FILES["fichier"]["tmp_name"]);
+	$converterfromTxt = new ConverterfromTxt($_FILES["fichier"]["tmp_name"]);
 	$title = "Protéines affichage";
 
 
 	// affiche les infos des protéines
-	/*foreach (preg_split("@(\s)+@",$proteins->getInfoProtein()) as $prot){
+	/*foreach (preg_split("@(\s)+@",$converterfromTxt->getInfoProtein()) as $prot){
 		echo $prot;
 	}*/
 	echo debut_html($title);
 	echo "<body>\n";
-	foreach ($proteins->getListOfProteins() as $prot) {
+	foreach ($converterfromTxt->getListOfProteins() as $prot) {
 
 		if (isset($_POST['miseAEchelle'])) {
-			SVG::show($prot, true);
+			SVG::show($prot, $converterfromTxt->getDomainParts(), true);
 		} else {
-			SVG::show($prot, false);
+			SVG::show($prot, $converterfromTxt->getDomainParts(), false);
 		}
-
+	
 	}
 	echo "</body></html>";
 
