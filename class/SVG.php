@@ -53,9 +53,16 @@ abstract class SVG
 					
 		
 			for($i=0;$i<$nbPart;$i++) {
+				if($i==0 || $i==$nbPart-1) {
+					$rx="rx=\"10\"";
+				}
+				else
+				{
+					$rx="rx=\"4\"";
+				}
 				$svg .= '<rect x="' . ($domainFirst+($lengthDomain/$nbPart)*$i)
 					. '" y="15" width="' . ($lengthDomain/$nbPart)
-					. '" height="30" rx="5" style="fill:' . $colorFile[(substr($domain->getId(), 2)*($i+1)*$domainParts[$domain->getID()]['random'])%148] . ';stroke:black;stroke-width:2"><title>' . $domain->getId()
+					. '" height="30"  '.$rx.' style="fill:' . $colorFile[(substr($domain->getId(), 2)*($i+1)*$domainParts[$domain->getID()]['random'])%148] . ';stroke:black;stroke-width:2"><title>' . $domain->getId()
 					. '</title></rect>';
 			}
 			
