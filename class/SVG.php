@@ -20,7 +20,7 @@ abstract class SVG
 			$taille = $length + 10;
 		}
 
-		$svg = '<div><h4>.' . $proteine->getId() . '</h3><br/><svg height="60" width="' . $taille . '">
+		$svg = '<tr><th>.' . $proteine->getId() . '</th><td><svg height="60" width="' . $taille . '">
 			<line x1="10" y1="30" x2="' . ($taille - 10) . '" y2="30" style="stroke:black;stroke-width:2"/>';
 		$svg .= "<rect width='" . $taille . "' height='60' style='fill:rgb(0,0,0);stroke-width:3' fill-opacity='0.1'/>";
 
@@ -71,7 +71,7 @@ abstract class SVG
 		}
 
 
-		$svg .= '</svg></div><br/><br />';
+		$svg .= '</svg></td><tr>';
 		echo $svg;
 	}
 

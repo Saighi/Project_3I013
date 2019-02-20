@@ -15,6 +15,8 @@ if (isset($_FILES["fichier"])) {
 	}*/
 	echo debut_html($title);
 	echo "<body>\n";
+	//echo $converterfromTxt->getInfoprotein()."\n";
+	echo "<TABLE BORDER='0'>\n" ;
 	foreach ($converterfromTxt->getListOfProteins() as $prot) {
 
 		if (isset($_POST['miseAEchelle'])) {
@@ -24,7 +26,7 @@ if (isset($_FILES["fichier"])) {
 		}
 	
 	}
-	echo "</body></html>";
+	echo "</TABLE>\n</body></html>";
 
 
 } else {

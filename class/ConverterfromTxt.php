@@ -30,7 +30,9 @@ class ConverterfromTxt{
 			{
 				/*On lit la ligne courante*/
 				$proteinAsAList= preg_split("@(\s)+@",trim(fgets($handle)));
-
+				if($proteinAsAList[0]==""){
+					break;
+				}
 				$proteine = new Proteine(['id' => $proteinAsAList[0],
 				'taille' => $proteinAsAList[1]]);
 				$this->infoProtein .= " 'id' =>".$proteinAsAList[0];
