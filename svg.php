@@ -1,14 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg">
-
-    <defs>
-      <linearGradient id="MyGradient" x2="0%" y2="100%">
-        <stop offset="33%" stop-color="white" />
-        <stop offset="33%" stop-color="#FF6" />
-        <stop offset="66%" stop-color="#FF6" />
-        <stop offset="66%" stop-color="#F60" />
-      </linearGradient>
-    </defs>
-
-    <rect fill="url(#MyGradient)" stroke="black" stroke-width="5"  
-          x="100" y="100" width="200" height="600"/>
+<!--<polygon points="0,27 50,12 100,27 50,42" />-->
+<!--<polygon points="0,0 100,0 90,15 100,30 0,30 10,15 " />-->
+<!--<path d="M10 10 h 100 q-20,20 0,40 h -100 q20,-20 0,-40 "/>-->
+<!--<polygon points="0,0 50,5 100,0 100,30 50,20 0,30 " />-->
+<!--<ellipse cx="100" cy="30" rx="100" ry="30" />-->
+<!--<path d="M10 10 q50,20 100,0  v40  q-50,-20 -100,0 v-40 "/>-->
+<path d="M0 27 q50,20 100,0 v40 q-50,-20 -100,0 v-40 " />
 </svg>
