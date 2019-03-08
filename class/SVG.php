@@ -116,10 +116,7 @@ abstract class SVG
             }
             $colorFile = file('colors.txt');
 
-            $color = substr($domain->getId(), 2);
-            $color .= '0';
-            $color = $colorFile[($domainParts[$domain->getId()]['randomColor'] * $color) % 148];
-
+          
             $lengthDomain = ($domainLast - $domainFirst);
             $nbPart = $domainParts[$domain->getId()]['nbParts'];
             $fillPercentage = round(100 / $nbPart);
