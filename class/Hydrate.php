@@ -17,7 +17,7 @@ trait Hydrate {
             }
         }
     }
- public function refreshConstructor(array $donnees)
+    public function refreshConstructor(array $donnees)
     {
         $this->hydrater($donnees);
     }
