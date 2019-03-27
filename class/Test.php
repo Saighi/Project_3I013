@@ -1,14 +1,15 @@
 <?php
 require_once('Tools.php');
-function afficher_proteines($converterfromTxt, $nbPages, $protPerPages,$miseAEchelle)
+function afficher_proteines( $listOfProteins, $domainsParts,$nbPages, $protPerPages,$miseAEchelle)
 {
     $nbPages--;
-    foreach (array_slice($converterfromTxt->getListOfProteins(), $nbPages * $protPerPages, $protPerPages) as $prot) {
+
+    foreach (array_slice($listOfProteins, $nbPages * $protPerPages, $protPerPages) as $prot) {
 		if($miseAEchelle){
-			SVG::show($prot, $converterfromTxt->getDomainParts(), true);
+			SVG::show($prot, $domainsParts, true);
 		}
 		else{
-			SVG::show($prot, $converterfromTxt->getDomainParts(), false);
+			SVG::show($prot,$domainsParts, false);
 		}
     }
 }
@@ -65,9 +66,13 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
 	<input type="hidden" name="file" value="' . $fileProt . '"/>
 	<input type="hidden" name="nbProtPerPage" value="' . $nbProtPerPage . '"/>
 	<input type="hidden" name="miseAEchelle" value="' . $miseAEchelle . '"/>
-	</FORM>';
+    </FORM>';
+    
+    $listOfProteins=$converterfromTxt->getListOfProteins();
+    $Orderer= new Orderer($listOfProteins);
+    $listOfProteins=$Orderer->getOrderedListOfProteins();
 
-    afficher_proteines($converterfromTxt, isset($_GET['page']) ? $_GET['page'] : 0, $nbProtPerPage,$miseAEchelle);
+    afficher_proteines( $listOfProteins,$converterfromTxt->getDomainParts() ,isset($_GET['page']) ? $_GET['page'] : 0, $nbProtPerPage,$miseAEchelle);
     echo "</TABLE>\n</body></html>";
 } else {
 
