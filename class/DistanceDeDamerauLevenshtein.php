@@ -1,33 +1,10 @@
 <?php
-class MatriceBuilder
+class DistanceDeDamerauLevenshtein
 {
-    private $matriceDistance;
-
-    public function __construct($listOfProteins)
-    {
-        $this->setMatriceDistance($listOfProteins);
-    }
-
-    public function setMatriceDistance($listOfProteins)
-    {
-        $tailleListOfProteins=count($listOfProteins);
-        $this->matriceDistance = array();
-        for ($i=0;$i<$tailleListOfProteins;$i++){
-            for($j=$i+1;$j<$tailleListOfProteins;$j++){
-                
-                $reversed = array_reverse($listOfProteins[$i]-> getDomains());
-                $distanceReversed=$this->DistanceDeDamerauLevenshtein($reversed, $listOfProteins[$j]->getDomains());
-                $distanceNotReversed = $this->DistanceDeDamerauLevenshtein($listOfProteins[$i]-> getDomains(), $listOfProteins[$j]->getDomains());
-                $distance=($distanceNotReversed<$distanceReversed)? ($distanceNotReversed):($distanceReversed);
-                $this->matriceDistance[$i][$j]=$distance;
-
-            }
-        }
-        
-        
-    }
-
-    public function DistanceDeDamerauLevenshtein($listeDomaine1, $listeDomaine2)
+    private function __construct()
+    { }
+    
+    public static function DistanceDeDamerauLevenshtein($listeDomaine1, $listeDomaine2)
     {
         $sizeAlphabet = 0;
         $ids1 = array();
@@ -104,17 +81,5 @@ class MatriceBuilder
         return $d[$ids1Length][$ids2Length];
     }
 
-    // static public function af($d){
-    //     foreach ($d as $k=>$v){
-    //         foreach ($v as $ke=>$va){
-    //             echo $va;
-    //         }
-    //         echo "</br>";
-    //     }
-    // }
 
-    public function getMatriceDistance()
-    {
-        return $this->matriceDistance;
-    }
 }
