@@ -14,8 +14,8 @@ function cluster($individus, $nbClasses, $matrix)
         $j = 0;
         $distanceMin = $matrix[$i][$j];
 
-        for ($k = 1; $k < count($classes); $k++) {
-            for ($l = $k + 1; $l < count($classes); $l++) {
+        for ($k = 1; $k <= count($classes); $k++) {
+            for ($l = $k + 1; $l <= count($classes); $l++) {
                 if ($distanceMin > $matrix[$k][$l]) {
                     $i = $k;
                     $j = $l;
