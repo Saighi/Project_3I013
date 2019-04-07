@@ -21,7 +21,6 @@ class ConverterfromTxt
 
         $this->listOfProteins = array();
         $this->infoProtein = "";
-        $buffer = [];
         /*Ouverture du fichier en lecture seule*/
         $handle = fopen($file, 'r');
         /*Si on a réussi à ouvrir le fichier*/

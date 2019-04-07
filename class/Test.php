@@ -69,8 +69,7 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
     </FORM>';
     
     $listOfProteins=$converterfromTxt->getListOfProteins();
-    $Orderer= new Orderer($listOfProteins);
-    $listOfProteins=$Orderer->getOrderedListOfProteins();
+ 
 
     afficher_proteines( $listOfProteins,$converterfromTxt->getDomainParts() ,isset($_GET['page']) ? $_GET['page'] : 0, $nbProtPerPage,$miseAEchelle);
     echo "</TABLE>\n</body></html>";

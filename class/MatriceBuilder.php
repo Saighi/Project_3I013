@@ -1,37 +1,30 @@
 <?php
-class Orderer
+class MatriceBuilder
 {
-    private $orderedListOfProteins;
+    private $matriceDistance;
 
     public function __construct($listOfProteins)
     {
-        $this->setOrderedListOfProteins($listOfProteins);
+        $this->setMatriceDistance($listOfProteins);
     }
 
-    public function setOrderedListOfProteins($listOfProteins)
+    public function setMatriceDistance($listOfProteins)
     {
-        $this->orderedListOfProteins[] = $listOfProteins[0];
-        unset($listOfProteins[0]);
-        while(count($listOfProteins)>0){
-            $distancePrev = 9999;
-            $prot= $this->orderedListOfProteins[count($this->orderedListOfProteins)-1];
-            
-            foreach ($listOfProteins as $id2 => $prot2) {
+        $tailleListOfProteins=count($listOfProteins);
+        $this->matriceDistance = array();
+        for ($i=0;$i<$tailleListOfProteins;$i++){
+            for($j=$i+1;$j<$tailleListOfProteins;$j++){
                 
-                $reversed = array_reverse($prot-> getDomains());
-                $distanceReversed=$this->DistanceDeDamerauLevenshtein($reversed, $prot2->getDomains());
-                $distanceNotReversed = $this->DistanceDeDamerauLevenshtein($prot-> getDomains(), $prot2->getDomains());
+                $reversed = array_reverse($listOfProteins[$i]-> getDomains());
+                $distanceReversed=$this->DistanceDeDamerauLevenshtein($reversed, $listOfProteins[$j]->getDomains());
+                $distanceNotReversed = $this->DistanceDeDamerauLevenshtein($listOfProteins[$i]-> getDomains(), $listOfProteins[$j]->getDomains());
                 $distance=($distanceNotReversed<$distanceReversed)? ($distanceNotReversed):($distanceReversed);
-                
-                if ($distance < $distancePrev) {
-                    $idPlusProcheProt = $id2;
-                    $distancePrev = $distance;
-                }
+                $this->matriceDistance[$i][$j]=$distance;
+
             }
-            
-            $this->orderedListOfProteins[] = $listOfProteins[$idPlusProcheProt];
-            unset($listOfProteins[$idPlusProcheProt]);
         }
+        
+        
     }
 
     public function DistanceDeDamerauLevenshtein($listeDomaine1, $listeDomaine2)
@@ -120,8 +113,8 @@ class Orderer
     //     }
     // }
 
-    public function getOrderedListOfProteins()
+    public function getMatriceDistance()
     {
-        return $this->orderedListOfProteins;
+        return $this->matriceDistance;
     }
 }
