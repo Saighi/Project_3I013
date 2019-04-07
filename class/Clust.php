@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 require_once('Tools.php');
 
 function cluster($individus, $nbClasses, $matrix)
