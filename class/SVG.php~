@@ -5,11 +5,11 @@ define('WITH', 1010);
 abstract class SVG
 {
     private function __construct()
-    {
+    { 
 
     }
 
-
+    
     public static function show($proteine, $domainProperties, $miseAEchelle)
     {
         proteine_ok($proteine);
@@ -46,7 +46,7 @@ abstract class SVG
                 $domainFirst = $domain->getFirst();
                 $domainLast = $domain->getLast();
             }
-            $colorFile = file('colors.txt');
+            $colorFile = file(__DIR__ . '\colors.txt');
 
 
             $lengthDomain = ($domainLast - $domainFirst);
@@ -76,7 +76,7 @@ abstract class SVG
     #Fonction rsponsable du choix de forme et fonction d'un paramètre aléatoire
     private static function choice($randomForm, $domainFirst, $lengthDomain, $domainId)
     {
-        // alpha est le facteur de correction de la taille du domaine, ainsi si un domaine est trop petit pour être affiché avec une certaine forme
+        // alpha est le facteur de correction de la taille du domaine, ainsi si un domaine est trop petit pour être affiché avec une certaine forme 
         // il est élargi d'un facteur alpha correspondant à la largeur necessaire (20 ici).
         if (($lengthDomain) < 20) {
             $alpha = (20 - $lengthDomain) / 2;
