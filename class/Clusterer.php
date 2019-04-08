@@ -1,5 +1,5 @@
 <?php
-ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+#ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 require_once('Tools.php');
 
 
@@ -7,12 +7,34 @@ class Clusterer
 {
 
     private $clusters; # Array of Protein's Array
+    private $matrixDistance; # Matrice de Distances entre individus (protéines)
 
     public function __construct($proteins, $nbClasses)
     {
+        $this->updateMatrixDistance($proteins);
         $this->setClusters($proteins, $nbClasses);
     }
 
+    private function updateMatrixDistance($proteins)
+    {
+        #   But : matrixDistance[prot1][prot2] = distance (prot1,prot2)
+
+        $proteinsLength = count($proteins);
+
+        for ($i = 0; $i < $proteinsLength; $i++) {
+            for ($j = $i + 1; $j < $proteinsLength; $j++) {
+                $this->matrixDistance[$proteins[$i]->getId()][$proteins[$j]->getId()] = $this->DistanceDeDamerauLevenshtein($proteins[$i]->getDomains(), $proteins[$j]->getDomains());
+            }
+        }
+
+        # Symétrie par rapport à la diagonale tel que : matrixDistance[A][B] = matrixDistance[B][A]
+
+        for ($i = 0; $i < $proteinsLength; $i++) {
+            for ($j = $i + 1; $j < $proteinsLength; $j++) {
+                $this->matrixDistance[$proteins[$j]->getId()][$proteins[$i]->getId()] = $this->matrixDistance[$proteins[$i]->getId()][$proteins[$j]->getId()];
+            }
+        }
+    }
 
     public function setClusters($proteins, $nbClasses)
     {
@@ -24,11 +46,11 @@ class Clusterer
         while (count($classes) > $nbClasses) {
 
             #Calcul des dissimilarités entre classes dans une matrice triangulaire supérieure
+            $classesLength = count($classes);
+            # $matDissim : Matrice = ($classesLength * $classesLength)
 
-            # $matDissim : Matrice = (count($classes) * count($classes))
-
-            for ($i = 0; $i < count($classes); $i++) {
-                for ($j = $i + 1; $j < count($classes); $j++) {
+            for ($i = 0; $i < $classesLength; $i++) {
+                for ($j = $i + 1; $j < $classesLength; $j++) {
                     $matDissim[$i][$j] = $this->dissim($classes[$i], $classes[$j]);
                 }
             }
@@ -37,8 +59,8 @@ class Clusterer
             $j = 1;
             $distanceMin = $matDissim[$i][$j];
 
-            for ($k = 1; $k < count($classes); $k++) {
-                for ($l = $k + 1; $l < count($classes) - 1; $l++) {
+            for ($k = 1; $k < $classesLength; $k++) {
+                for ($l = $k + 1; $l < $classesLength - 1; $l++) {
                     if ($distanceMin > $matDissim[$k][$l]) {
                         $i = $k;
                         $j = $l;
@@ -56,19 +78,22 @@ class Clusterer
         $this->clusters = $classes;
     }
 
+
+
+
     private function dissim($classe1, $classe2)
     {
         #Si chaque classe est composée d'un unique individu on renvoie la distance de Damerau-Levenshtein
         if (count($classe1) == count($classe2) && count($classe1) == 1) {
-            return $this->DistanceDeDamerauLevenshtein($classe1[0]->getDomains(), $classe2[0]->getDomains());
+            return $this->matrixDistance[$classe1[0]->getId()][$classe2[0]->getId()];
         } else
-            #Si non, les classes ont plusieurs proteins : nous calculons la distance par la moyenne des distances entre les proteins
+            #Si les classes ont plusieurs proteines : nous calculons la distance par la moyenne des distances entre les proteines
             {
                 $sum = 0;
                 $nbLinks = count($classe1) * count($classe2);
                 foreach ($classe1 as $prot1) {
                     foreach ($classe2 as $prot2) {
-                        $sum += $this->DistanceDeDamerauLevenshtein($prot1->getDomains(), $prot2->getDomains());
+                        $sum += $this->matrixDistance[$prot1->getId()][$prot2->getId()];
                     }
                 }
 
@@ -152,7 +177,8 @@ class Clusterer
 
         return $d[$ids1Length][$ids2Length];
     }
-    public function getClusters() {
+    public function getClusters()
+    {
         return $this->clusters;
     }
 }
