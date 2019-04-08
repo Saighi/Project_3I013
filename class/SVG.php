@@ -1,13 +1,80 @@
 <?php
 require_once 'Tools.php';
-require 'Constante.php';
+define('WITH', 1010);
 
 abstract class SVG
 {
     private function __construct()
-    { }
-    //Fonction résponsable du choix de forme et fonction d'un paramètre aléatoire
-    private static function choice($random, $domainFirst, $lengthDomain, $domainId)
+    { 
+
+    }
+
+    
+    public static function show($proteine, $domainProperties, $miseAEchelle)
+    {
+        proteine_ok($proteine);
+        $svgWidth = WITH; //longueur de la protéine affichée
+        $length = $proteine->getTaille();
+
+        if ($miseAEchelle) {
+            $taille = $svgWidth;
+        } else {
+            $taille = $length + 10;
+        }
+
+        $svg = '<tr><th>.' . $proteine->getId() . "</th>\n"
+            . "<td><svg height='84' width='" . ($taille + 20) . "'>\n"
+            . "<line x1='10' y1='42' x2='" . ($taille - 10) . "' y2='42' style='stroke:black;stroke-width:2'/>\n";
+
+        //$svg .= "<rect width='" . $taille . "' height='60' style='fill:rgb(0,0,0);stroke-width:3' fill-opacity='0.1'/>\n";
+
+        for ($i = 150; $i < $length; $i += 150) {
+            if ($miseAEchelle) {
+                $svg .= "<text x='" . (($i * $svgWidth) / $length) . "' y='12'>" . $i . "</text>\n"; // Affiche le début de chaque domaines au dessus de chaque domaines
+                $svg .= '<line x1="' . (($i * $svgWidth) / $length) . '" y1="12" x2="' . (($i * $svgWidth) / $length) . '" y2="72" stroke="black" stroke-width="3" stroke-dasharray="5,5"/>';
+            } else {
+                $svg .= "<text x='" . $i . "' y='12'>" . $i . "</text>\n"; // Affiche le début de chaque domaines au dessus de chaque domaines
+                $svg .= '<line x1="' . $i . '" y1="12" x2="' . $i . '" y2="72" stroke="black" stroke-width="3" stroke-dasharray="5,5"/>';
+            }
+        }
+
+        foreach ($proteine->getDomains() as $domain) {
+            if ($miseAEchelle) {
+                $domainFirst = ($domain->getFirst() * $svgWidth) / $length;
+                $domainLast = ($domain->getLast() * $svgWidth) / $length;
+            } else {
+                $domainFirst = $domain->getFirst();
+                $domainLast = $domain->getLast();
+            }
+            $colorFile = file(__DIR__ . '\colors.txt');
+
+
+            $lengthDomain = ($domainLast - $domainFirst);
+            $nbPart = $domainProperties[$domain->getId()]['nbParts'];
+            $fillPercentage = round(100 / $nbPart);
+            //on définit des "linearGradient" qui permettent à la base de faire des dégradés, dans notre cas
+            //cela permet d'afficher plusieurs couleurs pour un rectangle
+            if ($domainProperties[$domain->getID()]['sens'] == 0) {
+                $svg .= "<defs>\n<linearGradient id='MyGradient" . $domain->getId() . "' x2='100%' y2='0%'>\n";
+            } else {
+                $svg .= "<defs>\n<linearGradient id='MyGradient" . $domain->getId() . "' x2='0%' y2='100%'>\n";
+            }
+            for ($i = 0; $i < $nbPart; $i++) {
+                $svg .= "<stop offset='" . $fillPercentage . "%' stop-color='" . $colorFile[(substr($domain->getId(), 2) * ($i + 1) * $domainProperties[$domain->getID()]['randomColor']) % 148] . "' />\n";
+            }
+            $svg .= "</linearGradient>\n</defs>\n";
+            //Choix de la forme :
+            $svg .= SVG::choice($domainProperties[$domain->getID()]['randomForme'], $domainFirst, $lengthDomain, $domain->getID());
+            //x domaine commence
+            //width (domaine fini - domaine commence)
+        }
+
+        $svg .= '</svg></td><tr>';
+        echo $svg;
+    }
+
+    #Fonction rsponsable du choix de forme et fonction d'un paramètre aléatoire
+    private static function choice($randomForm, $domainFirst, $lengthDomain, $domainId)
     {
         // alpha est le facteur de correction de la taille du domaine, ainsi si un domaine est trop petit pour être affiché avec une certaine forme 
         // il est élargi d'un facteur alpha correspondant à la largeur necessaire (20 ici).
@@ -16,7 +83,7 @@ abstract class SVG
         } else {
             $alpha = 0;
         }
-        switch ($random) {
+        switch ($randomForm) {
                 //rectangle sans arrondi:
             case 0:
                 $forme = "<rect x='" . $domainFirst
@@ -78,66 +145,6 @@ abstract class SVG
         }
         return $forme;
     }
-    public static function show($proteine, $domainParts, $miseAEchelle)
-    {
-        proteine_ok($proteine);
-        $svgWidth = WITH; //longueur de la protéine affichée
-        $length = $proteine->getTaille();
 
-        if ($miseAEchelle) {
-            $taille = $svgWidth;
-        } else {
-            $taille = $length + 10;
-        }
 
-        $svg = '<tr><th>.' . $proteine->getId() . "</th>\n"
-            . "<td><svg height='84' width='" . ($taille + 20) . "'>\n"
-            . "<line x1='10' y1='42' x2='" . ($taille - 10) . "' y2='42' style='stroke:black;stroke-width:2'/>\n";
-
-        //$svg .= "<rect width='" . $taille . "' height='60' style='fill:rgb(0,0,0);stroke-width:3' fill-opacity='0.1'/>\n";
-
-        for ($i = 150; $i < $length; $i += 150) {
-            if ($miseAEchelle) {
-                $svg .= "<text x='" . (($i * $svgWidth) / $length) . "' y='12'>" . $i . "</text>\n"; // Affiche le début de chaque domaines au dessus de chaque domaines
-                $svg .= '<line x1="' . (($i * $svgWidth) / $length) . '" y1="12" x2="' . (($i * $svgWidth) / $length) . '" y2="72" stroke="black" stroke-width="3" stroke-dasharray="5,5"/>';
-            } else {
-                $svg .= "<text x='" . $i . "' y='12'>" . $i . "</text>\n"; // Affiche le début de chaque domaines au dessus de chaque domaines
-                $svg .= '<line x1="' . $i . '" y1="12" x2="' . $i . '" y2="72" stroke="black" stroke-width="3" stroke-dasharray="5,5"/>';
-            }
-        }
-
-        foreach ($proteine->getDomains() as $key => $domain) {
-            if ($miseAEchelle) {
-                $domainFirst = ($domain->getFirst() * $svgWidth) / $length;
-                $domainLast = ($domain->getLast() * $svgWidth) / $length;
-            } else {
-                $domainFirst = $domain->getFirst();
-                $domainLast = $domain->getLast();
-            }
-            $colorFile = file('colors.txt');
-
-          
-            $lengthDomain = ($domainLast - $domainFirst);
-            $nbPart = $domainParts[$domain->getId()]['nbParts'];
-            $fillPercentage = round(100 / $nbPart);
-            //on définit des "linearGradient" qui permettent à la base de faire des dégradés, dans notre cas
-            //cela permet d'afficher plusieurs couleurs pour un rectangle
-            if ($domainParts[$domain->getID()]['sens'] == 0) {
-                $svg .= "<defs>\n<linearGradient id='MyGradient" . $domain->getId() . "' x2='100%' y2='0%'>\n";
-            } else {
-                $svg .= "<defs>\n<linearGradient id='MyGradient" . $domain->getId() . "' x2='0%' y2='100%'>\n";
-            }
-            for ($i = 0; $i < $nbPart; $i++) {
-                $svg .= "<stop offset='" . $fillPercentage . "%' stop-color='" . $colorFile[(substr($domain->getId(), 2) * ($i + 1) * $domainParts[$domain->getID()]['randomColor']) % 148] . "' />\n";
-            }
-            $svg .= "</linearGradient>\n</defs>\n";
-            //Choix de la forme :
-            $svg .= SVG::choice($domainParts[$domain->getID()]['randomForme'], $domainFirst, $lengthDomain, $domain->getID());
-            //x domaine commence
-            //width (domaine fini - domaine commence)
-        }
-
-        $svg .= '</svg></td><tr>';
-        echo $svg;
-    }
 }
