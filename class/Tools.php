@@ -27,9 +27,9 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 		$protPerPages= count($listOfProteins);
 
 		$clusters=$clusterer->getClusters();
-
+		$alerts=['alert alert-primary','alert alert-success','alert alert-danger','alert alert-warning'];
 		foreach($clusters as $key => $groupe ) {
-			echo "</table><center><div><h2><b>Groupe $key</b></h2></div></center> <br /><table>";
+			echo "</table><div class='".$alerts[$key%4]."' role='alert' align='center'><h2><b>Groupe $key</b></h2></div> <br /><table>";
 			foreach($groupe as $prot) {
 				if ($miseAEchelle) {
 					SVG::show($prot, $domainsProperties, true);

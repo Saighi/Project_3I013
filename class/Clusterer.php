@@ -15,26 +15,7 @@ class Clusterer
         $this->setClusters($proteins, $nbClasses);
     }
 
-    private function updateMatrixDistance($proteins)
-    {
-        #   But : matrixDistance[prot1][prot2] = distance (prot1,prot2)
 
-        $proteinsLength = count($proteins);
-
-        for ($i = 0; $i < $proteinsLength; $i++) {
-            for ($j = $i + 1; $j < $proteinsLength; $j++) {
-                $this->matrixDistance[$proteins[$i]->getId()][$proteins[$j]->getId()] = $this->DistanceDeDamerauLevenshtein($proteins[$i]->getDomains(), $proteins[$j]->getDomains());
-            }
-        }
-
-        # Symétrie par rapport à la diagonale tel que : matrixDistance[A][B] = matrixDistance[B][A]
-
-        for ($i = 0; $i < $proteinsLength; $i++) {
-            for ($j = $i + 1; $j < $proteinsLength; $j++) {
-                $this->matrixDistance[$proteins[$j]->getId()][$proteins[$i]->getId()] = $this->matrixDistance[$proteins[$i]->getId()][$proteins[$j]->getId()];
-            }
-        }
-    }
 
     public function setClusters($proteins, $nbClasses)
     {
@@ -79,7 +60,35 @@ class Clusterer
     }
 
 
+    private function updateMatrixDistance($proteins)
+    {
+        #   But : matrixDistance[prot1][prot2] = distance (prot1,prot2)
 
+        $proteinsLength = count($proteins);
+
+        for ($i = 0; $i < $proteinsLength; $i++) {
+            for ($j = $i + 1; $j < $proteinsLength; $j++) {
+
+                # On considère dans le calcul de distane que Protéine ( A-B-C ) = Protéine ( C-B-A )
+                $distanceNotReversed = $this->DistanceDeDamerauLevenshtein($proteins[$i], $proteins[$j]);
+                $distanceReversed = $this->DistanceDeDamerauLevenshtein($proteins[$i]->cloneReverse(), $proteins[$j]);
+
+                # On prend la distance la plus petite
+                $distance = ($distanceNotReversed < $distanceReversed) ? ($distanceNotReversed) : ($distanceReversed);
+
+                $this->matrixDistance[$proteins[$i]->getId()][$proteins[$j]->getId()] =
+                    $this->DistanceDeDamerauLevenshtein($proteins[$i], $proteins[$j]);
+            }
+        }
+
+        # Symétrie par rapport à la diagonale tel que : matrixDistance[A][B] = matrixDistance[B][A]
+
+        for ($i = 0; $i < $proteinsLength; $i++) {
+            for ($j = $i + 1; $j < $proteinsLength; $j++) {
+                $this->matrixDistance[$proteins[$j]->getId()][$proteins[$i]->getId()] = $this->matrixDistance[$proteins[$i]->getId()][$proteins[$j]->getId()];
+            }
+        }
+    }
 
     private function dissim($classe1, $classe2)
     {
@@ -101,8 +110,10 @@ class Clusterer
             }
     }
 
-    private function DistanceDeDamerauLevenshtein($listeDomaine1, $listeDomaine2)
+    private function DistanceDeDamerauLevenshtein($proteine1, $proteine2)
     {
+        $listeDomaine1 = $proteine1->getDomains();
+        $listeDomaine2 = $proteine2->getDomains();
         $sizeAlphabet = 0;
         $ids1 = array();
         $ids2 = array();
@@ -149,7 +160,6 @@ class Clusterer
 
         $da = array();
 
-        // Orderer::af($d);
 
         for ($i = 1; $i <= $ids1Length; $i++) {
             $db = 0;
@@ -177,6 +187,7 @@ class Clusterer
 
         return $d[$ids1Length][$ids2Length];
     }
+
     public function getClusters()
     {
         return $this->clusters;

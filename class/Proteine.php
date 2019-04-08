@@ -54,6 +54,21 @@ class Proteine
         return $this->domains;
     }
 
+    public function setDomains($domains)
+    {
+        return $this->domains=$domains;
+    }
+
+    public function cloneReverse()
+    {
+        return new Proteine([
+        'id' => $this->id.'v2',
+        'taille' => $this->taille,
+        'domains' => array_reverse($this->domains)
+        ]
+    );
+    }
+
     
 
 }

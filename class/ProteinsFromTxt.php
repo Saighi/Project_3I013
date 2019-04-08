@@ -11,6 +11,7 @@ class ProteinsFromTxt
     public function __construct(String $file)
     {
         $this->setListOfProteins($file);
+       # $this->listOfProteins[]=$this->listOfProteins[0]->cloneReverse();
     }
 
     public function setListOfProteins($file)
