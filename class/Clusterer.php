@@ -56,9 +56,32 @@ class Clusterer
 
             array_splice($classes, $j, 1);
         }
+
+        $classes=$this->cluster0rderer($classes);
         $this->clusters = $classes;
     }
 
+
+    private function cluster0rderer($classes){
+        $classesTri=array();
+        $classesTri[]=$classes[0];
+        unset($classes[0]);
+        while(count($classes)>0){
+            $distancePrev = 9999;
+            $cluster=$classesTri[count($classesTri)-1];
+                foreach($classes as $key=>$c){
+                    $distance=$this->dissim($c,$cluster);
+                    if ($distance<$distancePrev){
+                        $keyCluster=$key;
+                        $distancePrev=$distance;
+                    }
+                }
+            $classesTri[]=$classes[$keyCluster];
+            unset($classes[$keyCluster]);
+        }
+
+        return $classesTri;
+    }
 
     private function updateMatrixDistance($proteins)
     {

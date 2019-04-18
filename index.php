@@ -14,8 +14,12 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
     $nbProtPerPage = isset($_GET['nbProtPerPage']) ? $_GET['nbProtPerPage'] : (isset($_POST['nbProtPerPage']) ? htmlspecialchars($_POST['nbProtPerPage']) : 20);
     $nbProtPerPage = $nbProt < $nbProtPerPage ? $nbProt : $nbProtPerPage;
     $miseAEchelle = isset($_POST['miseAEchelle']) ? $_POST['miseAEchelle'] : (isset($_GET["miseAEchelle"]) ? $_GET["miseAEchelle"] : false);
-    $nbClasses = htmlspecialchars($_POST['nbClasses']);
-
+    if(htmlspecialchars($_POST['nbClasses'])==0){
+        $nbClasses=1;
+    }else{
+        $nbClasses = round($nbProt*htmlspecialchars($_POST['nbClasses']));
+    }
+    echo $nbClasses;
     echo debut_html($title);
     echo "<body>\n";
     echo "<TABLE BORDER='0'>\n";
@@ -53,8 +57,8 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
         "<input type ='file' id='fichier' name='fichier' />\n" .
 
         "<br /><br /><label for id='nbProtPerPage'>Nb Proteines par Page : </label>\n" .
-        "<input type ='text' id='nbProtPerPage' name='nbProtPerPage' value='20'/>\n" .
-        "<br /><input type ='text' id='nbClasses' name='nbClasses' placeholder='Nb Clusters ?'/>\n" .
+        "<input type ='text' id='nbProtPerPage' name='nbProtPerPage' value='99999999'/>\n" .
+        "<br /><input type ='text' id='nbClasses' name='nbClasses' placeholder='indice de tri'/>\n" .
 
         "<br /><label for id='miseAEchelle'>Mise à l'echelle : </label>\n" .
         "<input type ='checkbox' id='miseAEchelle' name='miseAEchelle' />\n" .
