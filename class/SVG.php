@@ -69,7 +69,7 @@ abstract class SVG
             //width (domaine fini - domaine commence)
         }
 
-        $svg .= '</svg></td><tr>';
+        $svg .= '</svg></td>';
         echo $svg;
     }
 

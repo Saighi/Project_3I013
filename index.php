@@ -22,7 +22,7 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
     echo $nbClasses;
     echo debut_html($title);
     echo "<body>\n";
-    echo "<TABLE BORDER='0'>\n";
+   /* echo "<TABLE BORDER='0'>\n";
 
     echo '<br /><div align="center">
             <FORM action="" method="GET">
@@ -37,7 +37,7 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
            if($miseAEchelle)
              echo '<input type="hidden" name="miseAEchelle" value="' . $miseAEchelle . '"/>';
     echo '</FORM>
-        </div><br />';
+        </div><br />';*/
 
     $listOfProteins = $proteinsFromTxt->getListOfProteins();
     $domainProperties = $proteinsFromTxt->getDomainsProperties();
@@ -54,11 +54,11 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
             <fieldset>
                 <form action='' method='POST' enctype='multipart/form-data'>\n" .
         "<label for id='nom'>Rentrer votre fichier </label><br />\n" .
-        "<input type ='file' id='fichier' name='fichier' />\n" .
+        "<input type ='file' id='fichier' name='fichier' required/>\n" .
 
-        "<br /><br /><label for id='nbProtPerPage'>Nb Proteines par Page : </label>\n" .
-        "<input type ='text' id='nbProtPerPage' name='nbProtPerPage' value='99999999'/>\n" .
-        "<br /><input type ='text' id='nbClasses' name='nbClasses' placeholder='indice de tri'/>\n" .
+       // "<br /><br /><label for id='nbProtPerPage'>Nb Proteines par Page : </label>\n" .
+    //    "<input type ='text' id='nbProtPerPage' name='nbProtPerPage' value='99999999'/>\n" .
+        "<br /><input type ='text' id='nbClasses' name='nbClasses' placeholder='indice de tri' required/>\n" .
 
         "<br /><label for id='miseAEchelle'>Mise à l'echelle : </label>\n" .
         "<input type ='checkbox' id='miseAEchelle' name='miseAEchelle' />\n" .
