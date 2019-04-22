@@ -71,7 +71,9 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 			}
 		}
 	}
+
 }
+
 
 function upload_file($file)
 {
