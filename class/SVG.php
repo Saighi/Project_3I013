@@ -69,7 +69,7 @@ abstract class SVG
             
             $lengthDomain = ($domainLast - $domainFirst);
             //Choix de la forme :
-            $svg .= SVG::choice($domainProperties[$domain->getID()]['randomForme'], $domainFirst, $lengthDomain, $domain->getID());
+            $svg .= SVG::choice($domainProperties[$domain->getID()]['randomForme'], $domainFirst, $lengthDomain, $domain->getID(),$domain->getConfiance());
             //x domaine commence
             //width (domaine fini - domaine commence)
         }
@@ -78,7 +78,7 @@ abstract class SVG
     }
 
     #Fonction rsponsable du choix de forme et fonction d'un paramètre aléatoire
-    private static function choice($randomForm, $domainFirst, $lengthDomain, $domainId)
+    private static function choice($randomForm, $domainFirst, $lengthDomain, $domainId,$domainConfiance)
     {
         // alpha est le facteur de correction de la taille du domaine, ainsi si un domaine est trop petit pour être affiché avec une certaine forme
         // il est élargi d'un facteur alpha correspondant à la largeur necessaire (20 ici).
@@ -92,7 +92,7 @@ abstract class SVG
             case 0:
                 $forme = "<rect x='" . $domainFirst
                     . "' y='27' width='" . $lengthDomain
-                    . "' height='30'  fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                    . "' height='30'  fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance 
                     . "</title></rect>\n";
 
                 break;
@@ -101,48 +101,48 @@ abstract class SVG
                 //après avoir défini notre linear gradient on fait appel à lui dans la définition de notre rectangle par le biais de fill =fill="url(#MyGradient'.$domain->getId().')"
                 $forme = "<rect x='" . $domainFirst
                     . "' y='27' width='" . $lengthDomain
-                    . "' height='30'  rx='10' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                    . "' height='30'  rx='10' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance  
                     . "</title></rect>\n";
 
                 break;
                 //Losange:
             case 2:
-                $forme = "<polygon points='" . $domainFirst . ",42 " . ($domainFirst + ($lengthDomain / 2)) . ",27 " . ($domainFirst + $lengthDomain) . ",42 " . ($domainFirst + ($lengthDomain / 2)) . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<polygon points='" . $domainFirst . ",42 " . ($domainFirst + ($lengthDomain / 2)) . ",27 " . ($domainFirst + $lengthDomain) . ",42 " . ($domainFirst + ($lengthDomain / 2)) . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></polygon>\n";
                 break;
                 //Hexagone
             case 3:
-                $forme = "<polygon points='" . (($domainFirst + 10) - $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",42 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",57 " . (($domainFirst + 10) - $alpha) . ",57 " . (($domainFirst) - $alpha) . ",42' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<polygon points='" . (($domainFirst + 10) - $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",42 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",57 " . (($domainFirst + 10) - $alpha) . ",57 " . (($domainFirst) - $alpha) . ",42' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></polygon>\n";
                 break;
                 //Rectangle aux bords droit et gauche en courbe vers l'intérieur :
             case 4:
-                $forme = "<path d='M" . ($domainFirst - $alpha) . " 27 h " . ($lengthDomain + $alpha) . " q-15,15 0,30 h -" . ($lengthDomain + $alpha) . " q15,-15 0,-30 'fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<path d='M" . ($domainFirst - $alpha) . " 27 h " . ($lengthDomain + $alpha) . " q-15,15 0,30 h -" . ($lengthDomain + $alpha) . " q15,-15 0,-30 'fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></path>\n";
                 break;
                 //Noeud papillon:
             case 5:
-                $forme = "<polygon points='" . $domainFirst . ",27 " . ($domainFirst + $lengthDomain / 2) . ",32 " . ($domainFirst + $lengthDomain) . ",27 " . ($domainFirst + $lengthDomain) . ",57 " . ($domainFirst + $lengthDomain / 2) . ",52 " . $domainFirst . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<polygon points='" . $domainFirst . ",27 " . ($domainFirst + $lengthDomain / 2) . ",32 " . ($domainFirst + $lengthDomain) . ",27 " . ($domainFirst + $lengthDomain) . ",57 " . ($domainFirst + $lengthDomain / 2) . ",52 " . $domainFirst . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></polygon>\n";
                 break;
                 //Ovale:
             case 6:
-                $forme = "<ellipse cx='" . ($domainFirst + ($lengthDomain / 2)) . "' cy='42' rx='" . ($lengthDomain / 2) . "' ry='15' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<ellipse cx='" . ($domainFirst + ($lengthDomain / 2)) . "' cy='42' rx='" . ($lengthDomain / 2) . "' ry='15' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></ellipse>\n";
                 break;
                 //Enclume inversée :
             case 7:
-                $forme = "<polygon points='" . (($domainFirst + 10) - $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",57 " . ($domainFirst - $alpha) . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<polygon points='" . (($domainFirst + 10) - $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",57 " . ($domainFirst - $alpha) . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></polygon>\n";
                 break;
                 //Enclume :
             case 8:
-                $forme = "<polygon points='" . ($domainFirst - $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",57 " . (($domainFirst + 10) - $alpha) . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<polygon points='" . ($domainFirst - $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",57 " . (($domainFirst + 10) - $alpha) . ",57' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></polygon>\n";
                 break;
                 //Flêche :
             case 9:
-                $forme = "<polygon points='" . ($domainFirst - $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",42 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",57 " . ($domainFirst - $alpha) . ",57 " . (($domainFirst + 10) - $alpha) . ",42' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title>" . $domainId
+                $forme = "<polygon points='" . ($domainFirst - $alpha) . ",27 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",27 " . (($domainFirst + $lengthDomain) + $alpha) . ",42 " . ((($domainFirst + $lengthDomain) - 10) + $alpha) . ",57 " . ($domainFirst - $alpha) . ",57 " . (($domainFirst + 10) - $alpha) . ",42' fill='url(#MyGradient" . $domainId . ")' stroke='black' stroke-width='2'><title> Nom : " . $domainId." Taille : ". $lengthDomain." Début : ".$domainFirst." Confiance : ".$domainConfiance
                     . "</title></polygon>\n";
                 break;
             default:
