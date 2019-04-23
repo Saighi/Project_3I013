@@ -5,9 +5,7 @@ define('WITH', 1010);
 abstract class SVG
 {
     private function __construct()
-    {
-
-    }
+    { }
 
 
     public static function show($proteine, $domainProperties, $miseAEchelle)
@@ -60,7 +58,7 @@ abstract class SVG
                 $svg .= "<defs>\n<linearGradient id='MyGradient" . $domain->getId() . "' x2='0%' y2='100%'>\n";
             }
             for ($i = 0; $i < $nbPart; $i++) {
-                $svg .= "<stop offset='" . $fillPercentage . "%' stop-color='" . $colorFile[(substr($domain->getId(), 2) * ($i + 1) * $domainProperties[$domain->getID()]['randomColor']) % 148] . "' />\n";
+                $svg .= "<stop offset='" . $fillPercentage . "%' stop-color='#" . $colorFile[(substr($domain->getId(), 2) * ($i + 1) * $domainProperties[$domain->getID()]['randomColor']) % 148] . "' />\n";
             }
             $svg .= "</linearGradient>\n</defs>\n";
             //Choix de la forme :
@@ -145,6 +143,4 @@ abstract class SVG
         }
         return $forme;
     }
-
-
 }

@@ -41,9 +41,9 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 		foreach ($clusters as $key => $groupe) {
 			$countGrp = count($groupe);
 			echo "</table>    <div class='cluster'>
-			<div class='" . $alerts[$key % 4] . "' role='alert' align='center'><h2><b>Groupe $key</b></h2>  <h3>$countGrp Protéines</h3>
-			<button type='button' class='btn btn-primary' onClick='javascript:onClick(this)'>Show
-			More</button>	</div> <br /><table>";
+			<div class='" . $alerts[$key % 4] . "' role='alert' align='center'><h2><b>Groupe ".($key+1)."</b></h2>  <h3>$countGrp ".(($countGrp==1)?'protéine':'protéines')."</h3>
+			<button type='button' class='".(($countGrp>1)?'btn btn-primary':'btn btn-secondary')."' onClick='javascript:onClick(this)' ".(($countGrp==1)?'disabled':'').">Show
+			More</button>	</div> <br /><table class='table table-hover'>";
 			foreach ($groupe as $indice => $prot) {
 				if ($miseAEchelle) {
 					SVG::show($prot, $domainsProperties, true);
