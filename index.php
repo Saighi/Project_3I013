@@ -19,7 +19,6 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
     }else{
         $nbClasses = round($nbProt*htmlspecialchars($_POST['nbClasses']));
     }
-    echo $nbClasses;
     echo debut_html($title);
     echo "<body>\n";
    /* echo "<TABLE BORDER='0'>\n";

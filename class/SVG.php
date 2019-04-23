@@ -7,9 +7,30 @@ abstract class SVG
     private function __construct()
     { }
 
+    public static function setDefs($domainProperties){
+        $def="<svg>";
 
+        foreach($domainProperties as $id =>$value){
+            $colorFile = file('colors.txt');
+            $nbPart = $value['nbParts'];
+            $fillPercentage = round(100 / $nbPart);
+            //on définit des "linearGradient" qui permettent à la base de faire des dégradés, dans notre cas
+            //cela permet d'afficher plusieurs couleurs pour un rectangle
+            if ($value['sens'] == 0) {
+                $def .= "<defs>\n<linearGradient id='MyGradient" . $id . "' x2='100%' y2='0%'>\n";
+            } else {
+                $def .= "<defs>\n<linearGradient id='MyGradient" . $id . "' x2='0%' y2='100%'>\n";
+            }
+            for ($i = 0; $i < $nbPart; $i++) {
+                $def .= "<stop offset='" . $fillPercentage . "%' stop-color='#" . trim($colorFile[(substr($id, 2) * ($i + 1) * $value['randomColor']) % 148])."'></stop>\n";
+            }
+            $def .= "</linearGradient>\n</defs>\n";
+        }
+        echo $def."</svg>";
+    }
     public static function show($proteine, $domainProperties, $miseAEchelle)
     {
+
         proteine_ok($proteine);
         $svgWidth = WITH; //longueur de la protéine affichée
         $length = $proteine->getTaille();
@@ -19,6 +40,7 @@ abstract class SVG
         } else {
             $taille = $length + 10;
         }
+
 
         $svg = '<tr><th>.' . $proteine->getId() . "</th>\n"
             . "<td><svg height='84' width='" . ($taille + 20) . "'>\n"
@@ -44,29 +66,13 @@ abstract class SVG
                 $domainFirst = $domain->getFirst();
                 $domainLast = $domain->getLast();
             }
-            $colorFile = file('colors.txt');
-
-
+            
             $lengthDomain = ($domainLast - $domainFirst);
-            $nbPart = $domainProperties[$domain->getId()]['nbParts'];
-            $fillPercentage = round(100 / $nbPart);
-            //on définit des "linearGradient" qui permettent à la base de faire des dégradés, dans notre cas
-            //cela permet d'afficher plusieurs couleurs pour un rectangle
-            if ($domainProperties[$domain->getID()]['sens'] == 0) {
-                $svg .= "<defs>\n<linearGradient id='MyGradient" . $domain->getId() . "' x2='100%' y2='0%'>\n";
-            } else {
-                $svg .= "<defs>\n<linearGradient id='MyGradient" . $domain->getId() . "' x2='0%' y2='100%'>\n";
-            }
-            for ($i = 0; $i < $nbPart; $i++) {
-                $svg .= "<stop offset='" . $fillPercentage . "%' stop-color='#" . $colorFile[(substr($domain->getId(), 2) * ($i + 1) * $domainProperties[$domain->getID()]['randomColor']) % 148] . "' />\n";
-            }
-            $svg .= "</linearGradient>\n</defs>\n";
             //Choix de la forme :
             $svg .= SVG::choice($domainProperties[$domain->getID()]['randomForme'], $domainFirst, $lengthDomain, $domain->getID());
             //x domaine commence
             //width (domaine fini - domaine commence)
         }
-
         $svg .= '</svg></td>';
         echo $svg;
     }

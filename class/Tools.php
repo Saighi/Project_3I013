@@ -39,7 +39,7 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 
 		$clusters = $clusterer->getClusters();
 		$alerts = ['alert alert-primary', 'alert alert-warning'];
-
+		SVG::setDefs($domainsProperties);
 		echo "
 			<table class='table table-hover'>";
 		foreach ($clusters as $key => $groupe) {
