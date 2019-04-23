@@ -16,8 +16,9 @@ function debut_html($title)
 		"<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n" .
 		"<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>\n" .
 		"    <script>
-        function onClick(elem) {
-            var proteinstoshowNode = elem.parentNode.parentNode.getElementsByClassName('proteinsToShow')[0]
+        function onClick(elem,index) {
+						console.log(elem.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode)
+						var proteinstoshowNode = elem.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName('proteinsToShow')[index]
             var mode = proteinstoshowNode.style.display
             proteinstoshowNode.style.display = (mode == '') ? 'none' : ''
             elem.innerHTML = (mode == '' ? 'Show more' : 'Hidden')
@@ -37,13 +38,32 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 		$protPerPages = count($listOfProteins);
 
 		$clusters = $clusterer->getClusters();
-		$alerts = ['alert alert-primary', 'alert alert-success', 'alert alert-danger', 'alert alert-warning'];
+		$alerts = ['alert alert-primary', 'alert alert-warning'];
+
+		echo "
+			<table class='table table-hover'>";
 		foreach ($clusters as $key => $groupe) {
 			$countGrp = count($groupe);
-			echo "</table>    <div class='cluster'>
-			<div class='" . $alerts[$key % 4] . "' role='alert' align='center'><h2><b>Groupe ".($key+1)."</b></h2>  <h3>$countGrp ".(($countGrp==1)?'protéine':'protéines')."</h3>
-			<button type='button' class='".(($countGrp>1)?'btn btn-primary':'btn btn-secondary')."' onClick='javascript:onClick(this)' ".(($countGrp==1)?'disabled':'').">Show
-			More</button>	</div> <br /><table class='table table-hover'>";
+			echo "<tbody class='cluster'>
+			<thead>
+			<td colspan='2'>
+					<div class='" . $alerts[$key % 2] . "' role='alert' align='left'>
+							<ul class='list-inline'>
+									<li class='list-inline-item'>
+											<h2>Groupe " . ($key + 1) . "</h2>
+									</li>
+									<li class='list-inline-item'>
+	
+											<h5>$countGrp " . (($countGrp == 1) ? 'protéine' : 'protéines') . "</h5>
+									</li>
+									<li class='list-inline-item'>
+	
+											<button type='button' class='" . (($countGrp > 1) ? ' btn btn-primary' : 'btn btn-secondary' )
+													. "' onClick='javascript:onClick(this,$key)' " . (($countGrp==1) ? 'disabled' : '' ) . ">Show
+				More</button>	
+			</li>
+			</ul>
+			</div>	</td></thead>";
 			foreach ($groupe as $indice => $prot) {
 				if ($miseAEchelle) {
 					SVG::show($prot, $domainsProperties, true);
@@ -51,14 +71,15 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 					SVG::show($prot, $domainsProperties, false);
 				}
 				if ($indice == 0) {
-					echo '<tbody class="proteinsToShow" style="display:none;"';
+					echo '<tbody class="proteinsToShow" style="display:none;">';
 				}
 				if ($indice == (count($groupe) - 1)) {
 					echo "</tbody>";
 				}
 			}
-			echo '</div>';
 		}
+		echo '</tbody>';
+		echo '</table>';
 	} else {
 
 		$nbPages--;
@@ -71,7 +92,6 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 			}
 		}
 	}
-
 }
 
 
