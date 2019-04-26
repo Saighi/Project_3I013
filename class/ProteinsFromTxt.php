@@ -11,7 +11,7 @@ class ProteinsFromTxt
     public function __construct(String $file)
     {
         $this->setListOfProteins($file);
-       # $this->listOfProteins[]=$this->listOfProteins[0]->cloneReverse();
+        # $this->listOfProteins[]=$this->listOfProteins[0]->cloneReverse();
     }
 
     public function setListOfProteins($file)
@@ -34,7 +34,7 @@ class ProteinsFromTxt
                 $proteine = new Proteine(['id' => $proteinAsAList[0],
                     'taille' => $proteinAsAList[1]]);
                 for ($j = 2; $j < sizeof($proteinAsAList); $j += 4) {
-                      $domain = new Domain(['id' => $proteinAsAList[$j],
+                        $domain = new Domain(['id' => $proteinAsAList[$j],
                         'confiance' => $proteinAsAList[$j + 1],
                         'first' => $proteinAsAList[$j + 2],
                         'last' => $proteinAsAList[$j + 3]]);
