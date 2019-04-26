@@ -21,7 +21,7 @@ function debut_html($title)
 					<title>
 						$title
 					</title>\n
-					</head>";
+				</head>";
 }
 
 #Fonction d'affichage des Groupes
@@ -40,7 +40,7 @@ function afficher_clusters($listOfProteins, $domainsProperties, $nbClasses, $mis
 	#On parcourt les groupes
 	foreach ($clusters as $indice => $groupe) {
 		$countGrp = count($groupe);
-		/* Entête du Groupe
+		/* Entête du Groupe :
 			Groupe {numéro}
 			{nombre} Protéine(s)
 			{Boutton {Show More | Hidden } }
