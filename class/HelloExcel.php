@@ -60,8 +60,7 @@ function getExcel($clusters)
                     if (!isset($domainProps[$domaine->getId()])) {
                         $domainProps[$domaine->getId()] = [
 
-                            "bgColor" => $colorFile[rand(0, 147)],
-                            "fontColor" => $colorFile[rand(0, 147)],
+                            "bgColor" => $colorFile[( rand(0, 147)*substr($domaine->getId(),2)  ) % 147],
                             "borderColor" => $colorFile[rand(0, 147)],
                             "border" => $randomBorder[rand(0, 7)],
                             "bold" => (rand(0, 3) == 0),
@@ -77,7 +76,7 @@ function getExcel($clusters)
                             'italic' => $domainProps[$domaine->getId()]["italic"],
                             'underline' => $domainProps[$domaine->getId()]["underline"],
                             'color' => [
-                                'rgb' => $domainProps[$domaine->getId()]["fontColor"],
+                                'rgb' => dechex(hexdec($domainProps[$domaine->getId()]["bgColor"])*(-1)),
                             ]
                         ],
                         'alignment' => [
