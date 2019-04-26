@@ -11,12 +11,13 @@ class Clusterer
 
     public function __construct($proteins, $nbClasses)
     {
-        $this->updateMatrixDistance($proteins);
+        $this->setMatrixDistance($proteins);
         $this->setClusters($proteins, $nbClasses);
     }
 
 
-
+    # crée nos clusters, contient la traduction en php du pseudocode 
+    # que l'on trouve à cette adresse : https://fr.wikipedia.org/wiki/Regroupement_hi%C3%A9rarchique
     public function setClusters($proteins, $nbClasses)
     {
         # $classes : Array of Protein's array
@@ -57,33 +58,38 @@ class Clusterer
             array_splice($classes, $j, 1);
         }
 
-        $classes=$this->cluster0rderer($classes);
+        $classes = $this->cluster0rderer($classes);
         $this->clusters = $classes;
     }
 
+    # Cette fonction ordonne les clusters d'une liste de clusters en fonction de leur distance relative.
+    # Les clusters le plus proche ont ainsi des indices adjacents et seront affichés côte à côte sur notre site.
 
-    private function cluster0rderer($classes){
-        $classesTri=array();
-        $classesTri[]=$classes[0];
+    private function cluster0rderer($classes)
+    {
+        $classesTri = array();
+        $classesTri[] = $classes[0];
         unset($classes[0]);
-        while(count($classes)>0){
+        while (count($classes) > 0) {
             $distancePrev = 9999;
-            $cluster=$classesTri[count($classesTri)-1];
-                foreach($classes as $key=>$c){
-                    $distance=$this->dissim($c,$cluster);
-                    if ($distance<$distancePrev){
-                        $keyCluster=$key;
-                        $distancePrev=$distance;
-                    }
+            $cluster = $classesTri[count($classesTri) - 1];
+            foreach ($classes as $key => $c) {
+                $distance = $this->dissim($c, $cluster);
+                if ($distance < $distancePrev) {
+                    $keyCluster = $key;
+                    $distancePrev = $distance;
                 }
-            $classesTri[]=$classes[$keyCluster];
+            }
+            $classesTri[] = $classes[$keyCluster];
             unset($classes[$keyCluster]);
         }
 
         return $classesTri;
     }
 
-    private function updateMatrixDistance($proteins)
+
+    # Crée la matrice triangulaire des distances entre les protéines.
+    private function setMatrixDistance($proteins)
     {
         #   But : matrixDistance[prot1][prot2] = distance (prot1,prot2)
 
@@ -92,7 +98,7 @@ class Clusterer
         for ($i = 0; $i < $proteinsLength; $i++) {
             for ($j = $i + 1; $j < $proteinsLength; $j++) {
 
-                # On considère dans le calcul de distane que Protéine ( A-B-C ) = Protéine ( C-B-A )
+                # On considère dans le calcul de distance que Protéine ( A-B-C ) = Protéine ( C-B-A )
                 $distanceNotReversed = $this->DistanceDeDamerauLevenshtein($proteins[$i], $proteins[$j]);
                 $distanceReversed = $this->DistanceDeDamerauLevenshtein($proteins[$i]->cloneReverse(), $proteins[$j]);
 
@@ -112,7 +118,8 @@ class Clusterer
             }
         }
     }
-
+    
+    # Cette fonction nous donne la distance entre cluster.
     private function dissim($classe1, $classe2)
     {
         #Si chaque classe est composée d'un unique individu on renvoie la distance de Damerau-Levenshtein
@@ -132,6 +139,9 @@ class Clusterer
                 return $sum / $nbLinks;
             }
     }
+
+    # Mesure de distance entre deux protéines, contient la traduction en php 
+    # du pseudo code que l'on trouve ici : https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
 
     private function DistanceDeDamerauLevenshtein($proteine1, $proteine2)
     {
