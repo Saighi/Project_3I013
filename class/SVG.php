@@ -2,10 +2,19 @@
 require_once 'Tools.php';
 define('WITH', 1010);
 
+# Cette classe génère l'ensemble du code SVG utilisé dans notre site web
+
 abstract class SVG
 {
     private function __construct()
     { }
+
+# Cette fonction affiche le code SVG donnant les définitions des couleurs remplissant nos domaines.
+# Les différentes formes représentant les domaines n'auront plus qu'à faire appel à 
+# ces définitions pour gérer leur remplissage.
+# les couleurs sont choisies en fonction d'un paramètre aléatoire dont la valeur est décrétée 
+# dans ProteinsFromTxt et se trouve dans $domainProperties.
+# Cette fonction doit être exécutée avant de commencer l'affichage des protéines. 
 
     public static function setDefs($domainProperties){
         $def="<svg>";
@@ -28,6 +37,8 @@ abstract class SVG
         }
         echo $def."</svg>";
     }
+
+    # Fonction se chargeant de l'affichage des protéines.
     public static function show($proteine, $domainProperties, $miseAEchelle)
     {
 
@@ -77,7 +88,9 @@ abstract class SVG
         echo $svg;
     }
 
-    #Fonction rsponsable du choix de forme et fonction d'un paramètre aléatoire
+    # Fonction rsponsable du choix de forme et fonction d'un paramètre aléatoire
+    # dont la valeur est décrétée 
+    # dans ProteinsFromTxt et se trouve dans $domainProperties.
     private static function choice($randomForm, $domainFirst, $lengthDomain, $domainId,$domainConfiance)
     {
         // alpha est le facteur de correction de la taille du domaine, ainsi si un domaine est trop petit pour être affiché avec une certaine forme
