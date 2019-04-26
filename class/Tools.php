@@ -25,16 +25,17 @@ function debut_html($title)
 }
 
 #Fonction d'affichage des Groupes
-function afficher_clusters($listOfProteins, $domainsProperties, $nbClasses, $miseAEchelle) {
+function afficher_clusters($listOfProteins, $domainsProperties, $nbClasses, $miseAEchelle)
+{
 
 	#Créer l'objet Clusterer à partir de la liste de Protéines et d'un nombre de Classe déjà définie par l'indice de trie
 	$clusterer = new Clusterer($listOfProteins, $nbClasses);
 	#$clusters = un Tableau contenant des Groupes (tableaux) de Protéines.
 	$clusters = $clusterer->getClusters();
 	#Pour alterner couleurs des entêtes de Groupe
-	$alerts = ['alert alert-primary', 'alert alert-warning']; 
+	$alerts = ['alert alert-primary', 'alert alert-warning'];
 	#Initialiser la définition des propriétés graphiques SVG
-	SVG::setDefs($domainsProperties); 
+	SVG::setDefs($domainsProperties);
 	#Affichage du Tableau Clusters
 	echo "<table class='table table-hover'>";
 	#On parcourt les groupes
@@ -63,6 +64,12 @@ function afficher_clusters($listOfProteins, $domainsProperties, $nbClasses, $mis
 															Show More
 													</button>	
 												</li>
+												<div class='pages' style='display:none;'>
+													<p class='text'></p>
+													<input type='number' class='inputNbProt'>
+													&emsp;&emsp;&emsp;
+													<select class='selector'></select>
+												</div>
 										</ul>
 									</div>
 									</td>
@@ -70,7 +77,9 @@ function afficher_clusters($listOfProteins, $domainsProperties, $nbClasses, $mis
 		#On parcourt les Protéines du Groupe
 		foreach ($groupe as $indice => $prot) {
 			#On affiche une ligne du Table représentant la protéine
+			echo ($indice==0)?'<tr style="outline: thin solid">':'<tr>'; #mettre bordure si premiere protéine
 			SVG::show($prot, $domainsProperties, $miseAEchelle);
+			echo '</tr>';
 			#Si nous avons affiché la première protéine du groupe, on masque les autres
 			if ($indice == 0) {
 				echo '<tbody class="proteinsToShow" style="display:none;">';
@@ -80,9 +89,11 @@ function afficher_clusters($listOfProteins, $domainsProperties, $nbClasses, $mis
 				echo "</tbody>";
 			}
 		}
+		#fin du groupe
+		echo '</tbody>';
 	}
 	#fin du tableau clusters
-	echo '</tbody> </table>';
+	echo '</table>';
 }
 
 #Fonction pour enregistrer le fichier dans le serveur
