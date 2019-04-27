@@ -13,6 +13,7 @@ class Clusterer
     {
         $this->setMatrixDistance($proteins);
         $this->setClusters($proteins, $nbClasses);
+        $this->clusters0rderer($this->clusters);
     }
 
 
@@ -57,15 +58,16 @@ class Clusterer
 
             array_splice($classes, $j, 1);
         }
-
-        $classes = $this->cluster0rderer($classes);
+        
         $this->clusters = $classes;
     }
+
+
 
     # Cette fonction ordonne les clusters d'une liste de clusters en fonction de leur distance relative.
     # Les clusters le plus proche ont ainsi des indices adjacents et seront affichés côte à côte sur notre site.
 
-    private function cluster0rderer($classes)
+    private function clusters0rderer($classes)
     {
         $classesTri = array();
         $classesTri[] = $classes[0];
@@ -84,7 +86,7 @@ class Clusterer
             unset($classes[$keyCluster]);
         }
 
-        return $classesTri;
+        $this->clusters=$classesTri;
     }
 
 
