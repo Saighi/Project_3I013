@@ -5,7 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-function getExcel($clusters)
+function getExcel($clusters,$fname)
 {
     $randomBorder = [
         \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_DASHDOT,
@@ -17,7 +17,7 @@ function getExcel($clusters)
         \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
         \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_NONE,
     ];
-    $colorFile = file('colors.txt');
+    $colorFile = file('../colors.txt');
 
     $domainProps = [];
 
@@ -130,5 +130,7 @@ function getExcel($clusters)
 
 
     $writer = new Xlsx($spreadsheet);
-    $writer->save('test.xlsx');
+    $writer->save('./excels/'.$fname.'.xlsx');
+    
 }
+

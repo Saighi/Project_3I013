@@ -17,7 +17,7 @@ function debut_html($title)
 				<head>\n
 					<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n
 					<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>\n
-					<script src='/Project_3I013/clickButton.js'></script>
+					<script src='/Project_3I013/index.js'></script>
 					<title>
 						$title
 					</title>\n
@@ -25,17 +25,14 @@ function debut_html($title)
 }
 
 #Fonction d'affichage des Groupes
-function afficher_clusters($listOfProteins, $domainsProperties, $nbClasses, $miseAEchelle)
+function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
 {
 
-	#Créer l'objet Clusterer à partir de la liste de Protéines et d'un nombre de Classe déjà définie par l'indice de trie
-	$clusterer = new Clusterer($listOfProteins, $nbClasses);
-	#$clusters = un Tableau contenant des Groupes (tableaux) de Protéines.
-	$clusters = $clusterer->getClusters();
 	#Pour alterner couleurs des entêtes de Groupe
-	$alerts = ['alert alert-primary', 'alert alert-warning'];
+	$alerts = ['alert alert-primary', 'alert alert-info'];
 	#Initialiser la définition des propriétés graphiques SVG
 	SVG::setDefs($domainsProperties);
+	
 	#Affichage du Tableau Clusters
 	echo "<table class='table table-hover'>";
 	#On parcourt les groupes

@@ -18,7 +18,7 @@ abstract class SVG
 
     public static function setDefs($domainProperties)
     {
-        $def = "<svg>";
+        $def = "<svg height='0' width='0'>";
 
         foreach ($domainProperties as $id => $value) {
             $colorFile = file('colors.txt');

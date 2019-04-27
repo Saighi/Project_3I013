@@ -49,26 +49,29 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
 
     $title = "Protéines affichage";
     echo debut_html($title);
-    echo "<body>\n";
-    /* echo "<TABLE BORDER='0'>\n";
+    echo "<body style='background-color:#F0F8FF'>\n";
+    include('includes/navbar.html');
 
-    echo '<br /><div align="center">
-            <FORM action="" method="GET">
-                <label for="page">Page : </label>
-                <SELECT id= "page" name="page" size="1" onchange="this.form.submit()">';
-    for ($i = 0; $i < round($nbProt / $nbProtPerPage); $i++) {
-        echo "<OPTION " . (($i == $_GET['page'] - 1) ? 'SELECTED' : '') . ">" . ($i + 1) . "</OPTION>";
-    }
-    echo '</SELECT> 
-                <input type="hidden" name="file" value="' . $fileProt . '"/>
-                <input type="hidden" name="nbProtPerPage" value="' . $nbProtPerPage . '"/>';
-           if($miseAEchelle)
-             echo '<input type="hidden" name="miseAEchelle" value="' . $miseAEchelle . '"/>';
-    echo '</FORM>
-        </div><br />';*/
+    #Créer l'objet Clusterer à partir de la liste de Protéines et d'un nombre de Classe déjà définie par l'indice de trie
+    $clusterer = new Clusterer($listOfProteins, $nbClasses);
+    #$clusters = un Tableau contenant des Groupes (tableaux) de Protéines.
+    $clusters = $clusterer->getClusters();
 
-    
-    afficher_clusters($listOfProteins, $domainProperties, $nbClasses,$miseAEchelle);
+
+
+    echo "<br /> <center>
+    <form method='POST' action='includes/ExtractExcel.php'>
+    <input type='hidden' name='fileProt' value='" . $fileProt . "'/>
+   <label for='name'> Nom de votre Excel </label>
+   <br />
+    <input type='text' style = 'width:25%;'  class='form-control' id='name' name='name' value='" . $fileProt . "' required/>
+    <input type='hidden' name='nbClasses' value='" . $nbClasses . "'/>
+
+    <button type='submit' style='width:30%;' class='btn btn-success btn-lg btn-block'>Extract to Excel</button>
+
+    </form>
+    </center>";
+    afficher_clusters($clusters, $domainProperties, $miseAEchelle);
 
     #Fin page Affichage de protéines
     echo "</body></html>";
@@ -77,28 +80,21 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
 
         $title = "Protéines Formulaire";
 
-        $body = "<body>
-                    <div align='center'>
-                        <fieldset>
-                            <form action='' method='POST' enctype='multipart/form-data'>\n
-                                <label for id='nom'>Rentrer votre fichier </label><br />\n
-                                <input type ='file' id='fichier' name='fichier' required/>\n" .
+        echo debut_html($title);
 
-            // "<br /><br /><label for id='nbProtPerPage'>Nb Proteines par Page : </label>\n" .
-            //    "<input type ='text' id='nbProtPerPage' name='nbProtPerPage' value='99999999'/>\n" .
-            "<br />
-                                <input type ='text' id='cutTree' name='cutTree' placeholder='indice de tri' required/>\n
-                                <br />
-                                <label for id='miseAEchelle'>Mise à l'echelle : </label>
-                                <input type ='checkbox' id='miseAEchelle' name='miseAEchelle' />
-                                <br /><br />
-                                <input type ='submit' id='submit' name='submit' />
-                                </form>
-                         </fieldset>
-                        </div>
-                   </body>
-              </html>";
+        ?>
 
+    <body style="background-color:#F0F8FF">
+        <?php
+        include('includes/navbar.html');
+        ?>
+        <br />
+        <?php
+        include('includes/formulaire.html');
+        ?>
+    </body>
 
-        echo debut_html($title) . $body;
-    }
+    </html>
+<?php
+}
+?>

@@ -1,4 +1,10 @@
+function onClickClustering() {
+  let cutTree = document.getElementById('cutTree')
+  cutTree.value= (cutTree.value==='')?0:''
+  cutTree.style.display=(cutTree.value === '0')?'none':''
+  
 
+}
 function onClick(elem, index) {
   let pages = document.getElementsByClassName('pages')[index]
   let proteinstoshowNode = document.getElementsByClassName('proteinsToShow')[index]
