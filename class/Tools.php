@@ -1,6 +1,6 @@
 <?php
 
-#Fonction pour import les classes
+#Fonction pour importer les classes
 function __autoload($className)
 {
 	$class = str_replace('_', '/', $className);
@@ -13,34 +13,37 @@ function debut_html($title)
 	return
 		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML Basic 1.1//EN'
 		  'http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd'>
-		<html xmlns='http://www.w3.org/1999/xhtml' lang='fr'>\n
-		<head>\n
-		<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n
-		<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>\n
-		<script src='/Project_3I013/clickButton.js'></script>
-		<title>
-		$title
-		</title>\n
-		</head>";
+			<html xmlns='http://www.w3.org/1999/xhtml' lang='fr'>\n
+				<head>\n
+					<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n
+					<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>\n
+					<script src='/Project_3I013/index.js'></script>
+					<title>
+						$title
+					</title>\n
+				</head>";
 }
 
-#Fonction d'affichage de protéines
-function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $protPerPages, $miseAEchelle, $nbClasses = 0)
+#Fonction d'affichage des Groupes
+function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
 {
-	#Mode Clustering
-	if ($nbClasses > 0) {
-		$clusterer = new Clusterer($listOfProteins, $nbClasses);
-		$protPerPages = count($listOfProteins); #pas de pagination
-		$clusters = $clusterer->getClusters();
-		$alerts = ['alert alert-primary', 'alert alert-warning']; #alterner couleurs entête groupe
-		SVG::setDefs($domainsProperties); #initialiser les définitions des propriétés graphiques SVG
-		#les groupes de protéines sont affichées sous forme de Tableau
-		echo "<table class='table table-hover'>";
-		#on parcourt les groupes
-		foreach ($clusters as $indice => $groupe) {
-			$countGrp = count($groupe);
-			#entête du groupe
-			echo "<tbody class='cluster'>
+
+	#Pour alterner couleurs des entêtes de Groupe
+	$alerts = ['alert alert-primary', 'alert alert-info'];
+	#Initialiser la définition des propriétés graphiques SVG
+	SVG::setDefs($domainsProperties);
+	
+	#Affichage du Tableau Clusters
+	echo "<table class='table table-hover'>";
+	#On parcourt les groupes
+	foreach ($clusters as $indice => $groupe) {
+		$countGrp = count($groupe);
+		/* Entête du Groupe :
+			Groupe {numéro}
+			{nombre} Protéine(s)
+			{Boutton {Show More | Hidden } }
+		*/
+		echo "<tbody class='cluster'>
 							<thead>
 								<td colspan='2'>
 									<div class='" . $alerts[$indice % 2] . "' role='alert' align='left'>
@@ -58,34 +61,36 @@ function afficher_proteines($listOfProteins, $domainsProperties, $nbPages, $prot
 															Show More
 													</button>	
 												</li>
+												<div class='pages' style='display:none;'>
+													<p class='text'></p>
+													<input type='number' class='inputNbProt'>
+													&emsp;&emsp;&emsp;
+													<select class='selector'></select>
+												</div>
 										</ul>
 									</div>
 									</td>
 							</thead>";
-			#On parcourt les protéines du groupe
-			foreach ($groupe as $indice => $prot) {
-				#On l'affiche
-				SVG::show($prot, $domainsProperties, $miseAEchelle);
-				#Si nous avons affiché la première protéine, on masque les autres
-				if ($indice == 0) {
-					echo '<tbody class="proteinsToShow" style="display:none;">';
-				}
-				#Si c'est la dernière protéine, on arrête le masquage ici
-				if ($indice == (count($groupe) - 1)) {
-					echo "</tbody>";
-				}
+		#On parcourt les Protéines du Groupe
+		foreach ($groupe as $indice => $prot) {
+			#On affiche une ligne du Table représentant la protéine
+			echo ($indice==0)?'<tr style="outline: thin solid">':'<tr>'; #mettre bordure si premiere protéine
+			SVG::show($prot, $domainsProperties, $miseAEchelle);
+			echo '</tr>';
+			#Si nous avons affiché la première protéine du groupe, on masque les autres
+			if ($indice == 0) {
+				echo '<tbody class="proteinsToShow" style="display:none;">';
+			}
+			#Si c'est la dernière protéine du groupe, on arrête le masquage ici
+			if ($indice == (count($groupe) - 1)) {
+				echo "</tbody>";
 			}
 		}
-		#fin du tableau
-		echo '</tbody> </table>';
-	} else #Mode non Clustering
-		{
-			#on affiche un nombre $protPerPages de protéines pour la page $nbPages
-			$nbPages--;
-			foreach (array_slice($listOfProteins, $nbPages * $protPerPages, $protPerPages) as $prot) {
-				SVG::show($prot, $domainsProperties, $miseAEchelle);
-			}
-		}
+		#fin du groupe
+		echo '</tbody>';
+	}
+	#fin du tableau clusters
+	echo '</table>';
 }
 
 #Fonction pour enregistrer le fichier dans le serveur

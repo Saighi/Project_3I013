@@ -1,0 +1,29 @@
+<div class="card text-center" style="width:50%;margin-left:auto;margin-right:auto;">
+    <div class="card-header">
+        <h5>Regroupement et visualisation de protéines par les architectures de domaines</h5>
+    </div>
+    <div class="card-body">
+        <fieldset>
+            <form action='' method='POST' enctype='multipart/form-data' onSubmit="document.getElementById('loader').style.display=''">
+                <label for id='nom'>Rentrer votre fichier </label><br />
+                <input type='file' id='fichier' name='fichier' required />
+                <div id="loader" class="spinner-grow text-primary" role="status" style="display:none;">
+                    </div>
+                <br /> <br />
+
+                <input type='text' class="form-control" id='cutTree' name='cutTree'
+                    placeholder='Indice de coupe (entre 0 et 1)' required />
+                <br />
+                <label for id='clustering'>Clustering: </label>
+                <input type='checkbox' id='clustering' onClick="javascript:onClickClustering()" checked />
+                <br />
+                <br />
+                <label for id='miseAEchelle'>Mise à l'echelle : </label>
+                <input type='checkbox' id='miseAEchelle' name='miseAEchelle' />
+                <br />
+                <br />
+                <button type="submit" class="btn btn-primary btn-lg">Valider</button>
+            </form>
+        </fieldset>
+    </div>
+</div>
