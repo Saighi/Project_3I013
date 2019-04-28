@@ -25,9 +25,7 @@ function debut_html($title)
 }
 
 #Fonction d'affichage des Groupes
-function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
-{
-
+function afficher_clusters($clusters, $domainsProperties, $miseAEchelle) {
 	#Pour alterner couleurs des entêtes de Groupe
 	$alerts = ['alert alert-primary', 'alert alert-info'];
 	#Initialiser la définition des propriétés graphiques SVG
@@ -74,7 +72,7 @@ function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
 		#On parcourt les Protéines du Groupe
 		foreach ($groupe as $indice => $prot) {
 			#On affiche une ligne du Table représentant la protéine
-			echo ($indice==0)?'<tr style="outline: thin solid">':'<tr>'; #mettre bordure si premiere protéine
+			echo ($indice==0)?'<tr style="outline: medium solid">':'<tr>'; #mettre bordure si premiere protéine
 			SVG::show($prot, $domainsProperties, $miseAEchelle);
 			echo '</tr>';
 			#Si nous avons affiché la première protéine du groupe, on masque les autres
