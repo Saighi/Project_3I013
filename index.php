@@ -61,7 +61,9 @@ if (isset($_GET['file']) || isset($_FILES['fichier'])) {
     
     
     echo "<br /> <center>
-    <form method='POST' action='includes/ExtractExcel.php'>
+    <iframe name='myframe' id='frame1' src='includes/ExtractExcel.php' style='width:0;height:0;border:0; border:none;'></iframe>
+
+    <form method='POST' action='includes/ExtractExcel.php' target='myframe'>
     <input type='hidden' name='fileProt' value='" . $fileProt . "'/>
     <label for='name'> Nom de votre Excel </label>
     <br />

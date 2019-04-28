@@ -1,8 +1,9 @@
 <?php
 require_once('../class/Tools.php');
-$fname=htmlspecialchars($_POST['fileProt']);
+if(isset($_POST['fileProt']) && isset($_POST['name'])) {
+$fname = htmlspecialchars($_POST['fileProt']);
 
-$name=htmlspecialchars($_POST['name']);
+$name = htmlspecialchars($_POST['name']);
 
 $proteinsFromTxt = new ProteinsFromTxt(htmlspecialchars('../data/proteines/' . $_POST['fileProt']));
 $listOfProteins = $proteinsFromTxt->getListOfProteins();
@@ -14,7 +15,17 @@ $clusterer = $clusterer->getClusters();
 
 include('Excel.php');
 if (getExcel($clusterer, $name)) {
-    echo 'ok';
+    echo 'Problème de chargement du fichier Excel';
 } else {
-    header("Location: excels/$name.xlsx");
+
+
+    echo "<html>
+            <head>
+          <SCRIPT LANGUAGE='JavaScript'>
+            window.location.href='excels/$name.xlsx'
+                
+            </SCRIPT>
+                </head>
+        </html>";
+    }
 }
