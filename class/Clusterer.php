@@ -18,12 +18,100 @@ class Clusterer
         $this->setMatrixDistance($proteins);
         $this->makeHierarchicClusters();
         $this->clusters0rderer($this->clusters);
+        $this->makeJSonDendrogram();
     }
 
+    private function makeJSonDendrogram()
+    {
+        # $classes : Array of Protein's array
+        # $classe  : Array de Protéines
+        foreach ($this->proteins as $i) {
+            $classes[][] = $i;
+            $classesImbrique[][]= $i;
+        }
 
+        
+        while (count($classes) > 1) {
+            
+            # Calcul des dissimilarités entre classes dans une matrice triangulaire supérieure
+            $classesLength = count($classes);
+            # $matDissim : Matrice = ($classesLength * $classesLength)
+            
+            for ($i = 0; $i < $classesLength; $i++) {
+                for ($j = $i + 1; $j < $classesLength; $j++) {
+                    $matDissim[$i][$j] = $this->dissim($classes[$i], $classes[$j]);
+                }
+            }
+            
+            #Recherche du minimum des distances
+            $i = 0;
+            $j = 1;
+            $distanceMin = $matDissim[$i][$j];
+            
+            for ($k = 1; $k < $classesLength; $k++) {
+                for ($l = $k + 1; $l < $classesLength - 1; $l++) {
+                    if ($distanceMin > $matDissim[$k][$l]) {
+                        $i = $k;
+                        $j = $l;
+                        $distanceMin = $matDissim[$i][$j];
+                    }
+                }
+            }
+            #Fusion de classes[i] et classes[j] 
+            foreach ($classes[$j] as $element) {
+                $classes[$i][] = $element;
+            }
+
+            $classesImbrique[$i][]=$classesImbrique[$j];
+
+            array_splice($classes, $j, 1);
+            array_splice($classesImbrique, $j, 1);
+        }
+        #classesJson est un tableau compatible avec le format json adapté à d3
+        $classesJson= $this->recursivClasses(1,$classesImbrique,0);
+        file_put_contents("dendrogram.json", json_encode($classesJson));
+        //echo '<pre>'; print_r($classesImbrique); echo '</pre>';
+    }
+    
+    
+    private function recursivClasses($level,$classesImbrique,$id){
+
+        if ($level==1){
+
+            $classesJson["name"]="node".$id;
+     
+            foreach($classesImbrique as $element){
+                $id+=1;
+                if(gettype($element)=="array"){
+                    $classesJson["children"][]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1),"children"=> $this->recursivClasses(($level+1),$element,$id));
+                }else{
+                    $classesJson["children"][]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1));
+                }
+            }
+            return $classesJson;
+       
+        }
+        else{
+            $classesJson=array();
+            foreach($classesImbrique as $element){
+                $id+=1;
+                if(gettype($element)=="array"){
+                    $classesJson[]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1),"children"=> $this->recursivClasses(($level+1),$element,$id));
+                }
+                else{
+                    $classesJson[]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1));
+                }
+            }
+            return $classesJson;
+         
+        }
+        
+
+
+    }
     # crée nos clusters, contient la traduction en php du pseudocode 
     # que l'on trouve à cette adresse : https://fr.wikipedia.org/wiki/Regroupement_hi%C3%A9rarchique
-    public function makeHierarchicClusters()
+    private function makeHierarchicClusters()
     {
         # $classes : Array of Protein's array
         # $classe  : Array de Protéines
@@ -62,7 +150,8 @@ class Clusterer
 
             array_splice($classes, $j, 1);
         }
-        
+
+
         $this->clusters = $classes;
     }
 

@@ -17,7 +17,8 @@ function debut_html($title)
 				<head>\n
 					<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n
 					<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>\n
-					<script src='/Project_3I013/index.js'></script>
+					<script src='/Project_3I013/index.js'></script>\n
+					<script src='http://d3js.org/d3.v4.js'></script>\n
 					<title>
 						$title
 					</title>\n

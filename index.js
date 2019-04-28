@@ -5,6 +5,7 @@ function onClickClustering() {
   
 
 }
+
 function onClick(elem, index) {
   let pages = document.getElementsByClassName('pages')[index]
   let proteinstoshowNode = document.getElementsByClassName('proteinsToShow')[index]
