@@ -1,5 +1,6 @@
 <?php
 
+define('ROOT_FOLDER','/Project_3I013');
 #Fonction pour importer les classes
 function __autoload($className)
 {
@@ -17,7 +18,7 @@ function debut_html($title)
 				<head>\n
 					<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n
 					<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>\n
-					<script src='/Project_3I013/index.js'></script>\n
+					<script src='".ROOT_FOLDER."/index.js'></script>\n
 					<script src='http://d3js.org/d3.v4.js'></script>\n
 					<title>
 						$title
@@ -26,19 +27,21 @@ function debut_html($title)
 }
 
 #Fonction d'affichage des Groupes
-function afficher_clusters($clusters, $domainsProperties, $miseAEchelle) {
+function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
+{
 	#Pour alterner couleurs des entêtes de Groupe
 	$alerts = ['alert alert-primary', 'alert alert-info'];
 	#Initialiser la définition des propriétés graphiques SVG
 	SVG::setDefs($domainsProperties);
-	
+
 	#Affichage du Tableau Clusters
 	echo "<table class='table table-hover'>";
 	#On parcourt les groupes
+	$nbClusters= count($clusters);
 	foreach ($clusters as $indice => $groupe) {
 		$countGrp = count($groupe);
 		/* Entête du Groupe :
-			Groupe {numéro}
+			Liste Totale (si un unique cluster) | Groupe {numéro}
 			{nombre} Protéine(s)
 			{Boutton {Show More | Hidden } }
 		*/
@@ -48,7 +51,7 @@ function afficher_clusters($clusters, $domainsProperties, $miseAEchelle) {
 									<div class='" . $alerts[$indice % 2] . "' role='alert' align='left'>
 										<ul class='list-inline'>
 											<li class='list-inline-item'>
-												<h2>Groupe " . ($indice + 1) . "</h2>
+												<h2>".( ($nbClusters==1)?'Liste totale':'Groupe ' . ($indice + 1) ) ."</h2>
 											</li>
 											<li class='list-inline-item'>
 												<h5>$countGrp " . (($countGrp == 1) ? 'protéine' : 'protéines') . "</h5>
@@ -73,7 +76,7 @@ function afficher_clusters($clusters, $domainsProperties, $miseAEchelle) {
 		#On parcourt les Protéines du Groupe
 		foreach ($groupe as $indice => $prot) {
 			#On affiche une ligne du Table représentant la protéine
-			echo ($indice==0)?'<tr style="outline: medium solid">':'<tr>'; #mettre bordure si premiere protéine
+			echo ($indice == 0) ? '<tr style="outline: medium solid">' : '<tr>'; #mettre bordure si premiere protéine
 			SVG::show($prot, $domainsProperties, $miseAEchelle);
 			echo '</tr>';
 			#Si nous avons affiché la première protéine du groupe, on masque les autres

@@ -1,8 +1,8 @@
 function onClickClustering() {
-  let cutTree = document.getElementById('cutTree')
-  cutTree.value= (cutTree.value==='')?0:''
-  cutTree.style.display=(cutTree.value === '0')?'none':''
-  
+  let nbClusters = document.getElementById('nbClusters')
+  nbClusters.value = (nbClusters.value === '') ? 0 : ''
+  nbClusters.style.display = (nbClusters.value === '0') ? 'none' : ''
+
 
 }
 
@@ -84,3 +84,5 @@ function changePage(index, pageNumber, nbProtPerPage) {
   text.innerText = nbProtPerPage + " prot par page - Page " + pageNumber + " sur " + Math.ceil(proteins.length / nbProtPerPage)
 
 }
+
+

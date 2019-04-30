@@ -1,28 +1,121 @@
+<script>
+    function onChangeDoDendrogram() {
+        document.getElementById('loader').style.display = ''
+        // Form Data
+        var formData = new FormData();
+
+        var fichier = document.getElementById("fichier");
+        if (fichier.files && fichier.files.length == 1) {
+            var file = fichier.files[0]
+            formData.set("file", file, file.name);
+        }
+        // Http Request  
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (request.responseText) { makeDendrogram(file.name) }
+
+        }
+        request.open('POST', "dendrogram.php");
+        request.send(formData);
+    }
+
+
+    function makeDendrogram(fileName) {
+        document.getElementById('loader').style.display = 'none'
+
+        // set the dimensions and margins of the graph
+        var width = 460
+        var height = 460
+
+        // append the svg object to the body of the page
+        var svg = d3.select('#my_dataviz')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .append('g')
+            .attr('transform', 'translate(40,0)');  // bit of margin on the left = 40
+
+        // read json data
+        d3.json('data/dendrograms/' + fileName + '.json', function (data) {
+
+            // Create the cluster layout:
+            var cluster = d3.cluster()
+                .size([height, width - 100]);  // 100 is the margin I will have on the right side
+
+            // Give the data to this cluster layout:
+            var root = d3.hierarchy(data, function (d) {
+                return d.children;
+            });
+            cluster(root);
+
+
+            // Add the links between nodes:
+            svg.selectAll('path')
+                .data(root.descendants().slice(1))
+                .enter()
+                .append('path')
+                .attr('d', function (d) {
+                    return 'M' + d.y + ',' + d.x
+                        + 'C' + (d.parent.y + 50) + ',' + d.x
+                        + ' ' + (d.parent.y + 150) + ',' + d.parent.x // 50 and 150 are coordinates of inflexion, play with it to change links shape
+                        + ' ' + d.parent.y + ',' + d.parent.x;
+                })
+                .style('fill', 'none')
+                .attr('stroke', '#ccc')
+
+
+            // Add a circle for each node.
+            svg.selectAll('g')
+                .data(root.descendants())
+                .enter()
+                .append('g')
+                .attr('transform', function (d) {
+                    return 'translate(' + d.y + ',' + d.x + ')'
+                })
+                .append('circle')
+                .attr('r', 7)
+                .style('fill', '#69b3a2')
+                .attr('stroke', 'black')
+                .style('stroke-width', 2)
+
+        })
+        document.getElementById('dendrogramLoaded').style.display = ''
+
+    }
+</script>
+
+
+</script>
 <div class="card text-center" style="width:50%;margin-left:auto;margin-right:auto;">
     <div class="card-header">
         <h5>Regroupement et visualisation de protéines par les architectures de domaines</h5>
     </div>
     <div class="card-body">
         <fieldset>
-            <form action='' method='POST' enctype='multipart/form-data' onSubmit="document.getElementById('loader').style.display=''">
+            <form action='' method='POST' enctype='multipart/form-data'
+                onSubmit="document.getElementById('loader').style.display = ''">
                 <label for id='nom'>Rentrer votre fichier </label><br />
-                <input type='file' id='fichier' name='fichier' required />
-                <div id="loader" class="spinner-grow text-primary" role="status" style="display:none;">
-                    </div>
-                <br /> <br />
+                <input type='file' id='fichier' name='fichier' onChange="javascript:onChangeDoDendrogram()" required />
 
-                <input type='text' class="form-control" id='cutTree' name='cutTree'
-                    placeholder='Indice de coupe (entre 0 et 1)' required />
                 <br />
-                <label for id='clustering'>Clustering: </label>
-                <input type='checkbox' id='clustering' onClick="javascript:onClickClustering()" checked />
+                <div id='my_dataviz'></div>
                 <br />
-                <br />
-                <label for id='miseAEchelle'>Mise à l'echelle : </label>
-                <input type='checkbox' id='miseAEchelle' name='miseAEchelle' />
-                <br />
-                <br />
-                <button type="submit" class="btn btn-primary btn-lg">Valider</button>
+                <div id="loader" class="spinner-grow text-primary" role="status" style="display:none;">
+                </div>
+                <div id='dendrogramLoaded' style='display:none'>
+                    <input type='text' class="form-control" id='nbClusters' name='nbClusters'
+                        placeholder='Nombre de Clusters' required />
+                    <br />
+                    <label for id='clustering'>Clustering: </label>
+                    <input type='checkbox' id='clustering' onClick="javascript:onClickClustering()" checked />
+                    <br />
+                    <br />
+                    <label for id='miseAEchelle'>Mise à l'echelle : </label>
+                    <input type='checkbox' id='miseAEchelle' name='miseAEchelle' />
+                    <br />
+                    <br />
+                    <button type="submit" class="btn btn-primary btn-lg">Valider</button>
+                </div>
             </form>
         </fieldset>
     </div>

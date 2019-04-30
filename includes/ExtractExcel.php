@@ -7,7 +7,7 @@ $name = htmlspecialchars($_POST['name']);
 
 $proteinsFromTxt = new ProteinsFromTxt(htmlspecialchars('../data/proteines/' . $_POST['fileProt']));
 $listOfProteins = $proteinsFromTxt->getListOfProteins();
-$clusterer = new Clusterer($listOfProteins, htmlspecialchars($_POST['nbClasses']));
+$clusterer = new Clusterer($listOfProteins, htmlspecialchars($_POST['nbClusters']));
 
 
 $clusterer = $clusterer->getClusters();

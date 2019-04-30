@@ -18,10 +18,9 @@ class Clusterer
         $this->setMatrixDistance($proteins);
         $this->makeHierarchicClusters();
         $this->clusters0rderer($this->clusters);
-        $this->makeJSonDendrogram();
     }
 
-    private function makeJSonDendrogram()
+    public function makeJSonDendrogram($filename)
     {
         # $classes : Array of Protein's array
         # $classe  : Array de Protéines
@@ -29,25 +28,19 @@ class Clusterer
             $classes[][] = $i;
             $classesImbrique[][]= $i;
         }
-
-        
-        while (count($classes) > 1) {
-            
+        while (count($classes) > 1) {   
             # Calcul des dissimilarités entre classes dans une matrice triangulaire supérieure
             $classesLength = count($classes);
             # $matDissim : Matrice = ($classesLength * $classesLength)
-            
             for ($i = 0; $i < $classesLength; $i++) {
                 for ($j = $i + 1; $j < $classesLength; $j++) {
                     $matDissim[$i][$j] = $this->dissim($classes[$i], $classes[$j]);
                 }
             }
-            
             #Recherche du minimum des distances
             $i = 0;
             $j = 1;
             $distanceMin = $matDissim[$i][$j];
-            
             for ($k = 1; $k < $classesLength; $k++) {
                 for ($l = $k + 1; $l < $classesLength - 1; $l++) {
                     if ($distanceMin > $matDissim[$k][$l]) {
@@ -61,16 +54,13 @@ class Clusterer
             foreach ($classes[$j] as $element) {
                 $classes[$i][] = $element;
             }
-
             $classesImbrique[$i][]=$classesImbrique[$j];
-
             array_splice($classes, $j, 1);
             array_splice($classesImbrique, $j, 1);
         }
         #classesJson est un tableau compatible avec le format json adapté à d3
         $classesJson= $this->recursivClasses(1,$classesImbrique,0);
-        file_put_contents("dendrogram.json", json_encode($classesJson));
-        //echo '<pre>'; print_r($classesImbrique); echo '</pre>';
+        file_put_contents('data/dendrograms/'.$filename.'.json',json_encode($classesJson));
     }
     
     
