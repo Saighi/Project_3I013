@@ -12,7 +12,9 @@
         // Http Request  
         var request = new XMLHttpRequest();
         request.onreadystatechange = function () {
-            if (request.responseText) { makeDendrogram(file.name) }
+            if (request.status == 200 && request.responseText) {
+                makeDendrogram(file.name)
+            }
 
         }
         request.open('POST', "dendrogram.php");
@@ -22,6 +24,21 @@
 
     function makeDendrogram(fileName) {
         document.getElementById('loader').style.display = 'none'
+
+
+        //Si on souhaite générer le dendrogram du prochain fichier sans effacer l'ancien:
+            // let nomFichier = document.createElement("p")
+            // nomFichier.innerHTML = "Dendrogramme du fichier : "+fileName
+            // document.getElementById("my_dataviz").appendChild(nomFichier)
+
+       
+        //Si non, si on souhaite afficher qu'un seul dendrogram, même si on change de fichier :
+        // on vide le "div" associé à l'affichage de dendrogram avant de générer le prochain
+           document.getElementById("my_dataviz").innerHTML=''
+
+
+
+
 
         // set the dimensions and margins of the graph
         var width = 460
