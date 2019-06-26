@@ -14,7 +14,7 @@ function onClick(elem, index) {
 
 
   let proteins = Array.prototype.slice.call(proteinstoshowNode.children)
-  let nbProtPerPage = proteins.length
+  let nbProtPerPage = (proteins.length>11)?10:proteins.length
   let nbPages = Math.round(proteins.length / nbProtPerPage)
   let mode = proteinstoshowNode.style.display
 
@@ -25,12 +25,12 @@ function onClick(elem, index) {
 
 
   inputNbProt.setAttribute("value", nbProtPerPage)
-  inputNbProt.setAttribute("onChange", "updateSelector(" + index + ",this.value," + proteins.length + ")")
+  inputNbProt.setAttribute("onChange", "updateSelector(" + index + ",this.value," + nbProtPerPage + ")")
   inputNbProt.min = 1
   inputNbProt.max = proteins.length
   text.innerText = inputNbProt.value + " prot par page - Page 1 sur " + nbPages
 
-  updateSelector(index, inputNbProt.value, proteins.length)
+  updateSelector(index, inputNbProt.value, nbProtPerPage)
 
 
 }

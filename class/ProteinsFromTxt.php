@@ -17,7 +17,7 @@ class ProteinsFromTxt
     public function setListOfProteins($file)
     {
         $this->listOfProteins = array();
-        $arrayDomNb = array(); // array [ID_OF_DOMAIN => nb ]
+        $arrayDomNbMaxsize = array(); // array [ID_OF_DOMAIN => nb, maxSize ]
         $combinaison = array();
 
         /*Ouverture du fichier en lecture seule*/
@@ -31,20 +31,28 @@ class ProteinsFromTxt
                 if ($proteinAsAList[0] == "") {
                     break;
                 }
-                $proteine = new Proteine(['id' => $proteinAsAList[0],
-                    'taille' => $proteinAsAList[1]]);
+                $proteine = new Proteine([
+                    'id' => $proteinAsAList[0],
+                    'taille' => $proteinAsAList[1]
+                ]);
                 for ($j = 2; $j < sizeof($proteinAsAList); $j += 4) {
-                        $domain = new Domain(['id' => $proteinAsAList[$j],
+                    $domain = new Domain([
+                        'id' => $proteinAsAList[$j],
                         'confiance' => $proteinAsAList[$j + 1],
                         'first' => $proteinAsAList[$j + 2],
-                        'last' => $proteinAsAList[$j + 3]]);
+                        'last' => $proteinAsAList[$j + 3]
+                    ]);
 
-                    if (!isset($arrayDomNb[$domain->getId()])) {
-                        $arrayDomNb[$domain->getId()] = 0;
+                    if (!isset($arrayDomNbMaxsize[$domain->getId()])) {
+                        $arrayDomNbMaxsize[$domain->getId()]['nb'] = 0;
+                        $arrayDomNbMaxsize[$domain->getId()]['maxSize'] = 0;
+           
                     }
 
-                    $arrayDomNb[$domain->getId()]++;
-
+                    $arrayDomNbMaxsize[$domain->getId()]['nb']++;
+                    if ($arrayDomNbMaxsize[$domain -> getId()]['maxSize'] < $proteinAsAList[$j + 3] - $proteinAsAList[$j + 2]) {
+                        $arrayDomNbMaxsize[$domain->getId()]['maxSize'] = $proteinAsAList[$j + 3] - $proteinAsAList[$j + 2];
+                    }
                     $proteine->addDomain($domain);
                 }
                 ($this->listOfProteins)[] = $proteine;
@@ -52,16 +60,20 @@ class ProteinsFromTxt
             /*On ferme le fichier*/
             fclose($handle);
         }
-        foreach ($arrayDomNb as $id => $nb) {
+        foreach ($arrayDomNbMaxsize as $id => $tab) {
             //la génération aléatoire boucle jusqu'a ce que on tombe sur une
             //combinaison (nombre de couleurs,couleurs,forme) qui ne soit pas utilisée.
             //le resultat est que, si on a pas assez de combinaisons possibles pour le nombre de domaine
             //on est amené à boucler à l'infini, à surveiller.
             do {
-                $nbPart = round(1 / $nb) + 1;
+                $nbPart = round(1 / $tab['nb']) + 1;
                 $randomColor = rand(1, 148);
                 //initialisation de la forme aléatoire
-                $randomForme = rand(0, 9);
+                if ($tab['maxSize'] > 200) {
+                    $randomForme = rand(0, 7);
+                } else {
+                    $randomForme = rand(0, 9);
+                }
                 $sens = rand(0, 1);
             } while (in_array(array($nbPart, $randomColor, $randomForme), $combinaison));
             $this->domainProperties[$id]['nbParts'] = $nbPart;
@@ -88,5 +100,4 @@ class ProteinsFromTxt
     {
         return $this->infoProtein;
     }
-
 }

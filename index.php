@@ -1,6 +1,7 @@
 <?php
 #Tools.php : Recharger les Classes et les fonctions utiles
 require_once('class/Tools.php');
+require_once('includes/lang.php');
 
 /*Si données protéines à traiter (fichier rentrée dans le formulaire)
     => Page Affichage de Protéines */
@@ -28,7 +29,7 @@ if (isset($_FILES['fichier'])) {
 
     // Corps de la page
 
-    $title = "Protéines affichage";
+    $title = TITLE_SHOW;
     echo debut_html($title);
     echo "<body style='background-color:#F0F8FF'>\n";
 
@@ -41,20 +42,18 @@ if (isset($_FILES['fichier'])) {
 
 
 
-    echo "<br /> <center>
-    <iframe name='myframe' id='frame1' src='includes/ExtractExcel.php' style='width:0;height:0;border:0; border:none;'></iframe>
-
-    <form method='POST' action='includes/ExtractExcel.php' target='myframe'>
-    <input type='hidden' name='fileProt' value='" . $fileProt . "'/>
-    <label for='name'> Nom de votre Excel </label>
-    <br />
-    <input type='text' style = 'width:25%;'  class='form-control' id='name' name='name' value='" . $fileProt . "' required/>
-    <input type='hidden' name='nbClusters' value='" . $nbClusters . "'/>
-    
-    <button type='submit' style='width:30%;' class='btn btn-success btn-lg btn-block'>Extract to Excel</button>
-    
-    </form>
-    </center>";
+    echo "
+        <div class='content'>
+        <br />     
+        <iframe name='myframe' id='frame1' src='includes/ExtractExcel.php' style='width:0;height:0;border:0; border:none;'></iframe>
+        <form method='POST' action='includes/ExtractExcel.php' target='myframe'>
+        <input type='hidden' name='fileProt' value='" . $fileProt . "'/>
+        <label for='name'> ".EXCEL_INPUT." </label>
+        <br />
+        <input type='text' style = 'width:25%;'  class='form-control' id='name' name='name' value='" . $fileProt . "' required/>
+        <input type='hidden' name='nbClusters' value='" . $nbClusters . "'/>
+        <button type='submit' style='width:30%;' class='btn btn-success btn-lg btn-block'>".EXTRACT_EXCEL."</button>
+        </form>";
     ?>
     <br /> <br />
 
@@ -64,11 +63,13 @@ if (isset($_FILES['fichier'])) {
     afficher_clusters($clusters, $domainProperties, $miseAEchelle);
 
     #Fin page Affichage de protéines
-    echo "</body></html>";
+    echo "
+    </div>
+    </body></html>";
 } else #Page Formulaire
 {
 
-    $title = "Protéines Formulaire";
+    $title = PROTEINS_FORM;
 
     echo debut_html($title);
 
@@ -81,6 +82,10 @@ if (isset($_FILES['fichier'])) {
         <br />
         <?php
         include('includes/formulaire.html');
+        include('includes/overfree.html');
+        include('includes/spotlight.html');
+        include('includes/footer.html');
+
         ?>
 
     </body>

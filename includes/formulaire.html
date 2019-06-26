@@ -27,14 +27,14 @@
 
 
         //Si on souhaite générer le dendrogram du prochain fichier sans effacer l'ancien:
-            // let nomFichier = document.createElement("p")
-            // nomFichier.innerHTML = "Dendrogramme du fichier : "+fileName
-            // document.getElementById("my_dataviz").appendChild(nomFichier)
+        // let nomFichier = document.createElement("p")
+        // nomFichier.innerHTML = "Dendrogramme du fichier : "+fileName
+        // document.getElementById("my_dataviz").appendChild(nomFichier)
 
-       
+
         //Si non, si on souhaite afficher qu'un seul dendrogram, même si on change de fichier :
         // on vide le "div" associé à l'affichage de dendrogram avant de générer le prochain
-           document.getElementById("my_dataviz").innerHTML=''
+        document.getElementById("my_dataviz").innerHTML = ''
 
 
 
@@ -101,39 +101,52 @@
     }
 </script>
 
+<section class="section transheader homepage parallax" data-stellar-background-ratio="0.89"
+    style="background-image:url('upload/bgDavi.png');">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 col-sm-12 text-center">
+                <h2>Input your domain architecture file</h2>
+                <p class="lead"></p>
+                <form action='' method='POST' enctype='multipart/form-data'
+                    onSubmit="document.getElementById('loader').style.display = ''">
+                    <div class="item-box">
+                        <div class="item-top form-inline">
+                            <div class="form-group">
+                                <div class="input-group2">
+                                    <span class="input-addon">
+                                    </span>
 
-</script>
-<div class="card text-center" style="width:50%;margin-left:auto;margin-right:auto;">
-    <div class="card-header">
-        <h5>Regroupement et visualisation de protéines par les architectures de domaines</h5>
-    </div>
-    <div class="card-body">
-        <fieldset>
-            <form action='' method='POST' enctype='multipart/form-data'
-                onSubmit="document.getElementById('loader').style.display = ''">
-                <label for id='nom'>Rentrer votre fichier </label><br />
-                <input type='file' id='fichier' name='fichier' onChange="javascript:onChangeDoDendrogram()" required />
+                                    <div class="custom-file">
+                                        <input type='file' id='fichier' name='fichier' onChange="javascript:onChangeDoDendrogram()" required />
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                    </div>
 
-                <br />
-                <div id='my_dataviz'></div>
-                <br />
-                <div id="loader" class="spinner-grow text-primary" role="status" style="display:none;">
-                </div>
-                <div id='dendrogramLoaded' style='display:none'>
-                    <input type='text' class="form-control" id='nbClusters' name='nbClusters'
-                        placeholder='Nombre de Clusters' required />
+                                </div>
+                            </div>
+                            <!--  <input type="submit" name="send" value="search" class="btn btn-default" />-->
+                        </div>
+                    </div>
+                    <div id='my_dataviz'></div>
                     <br />
-                    <label for id='clustering'>Clustering: </label>
-                    <input type='checkbox' id='clustering' onClick="javascript:onClickClustering()" checked />
-                    <br />
-                    <br />
-                    <label for id='miseAEchelle'>Mise à l'echelle : </label>
-                    <input type='checkbox' id='miseAEchelle' name='miseAEchelle' />
-                    <br />
-                    <br />
-                    <button type="submit" class="btn btn-primary btn-lg">Valider</button>
-                </div>
-            </form>
-        </fieldset>
-    </div>
-</div>
+                    <div id="loader" class="spinner-grow text-primary" role="status" style="display:none;">
+                    </div>
+                    <div id='dendrogramLoaded' style='display:none'>
+                        <input type='text' class="form-control" id='nbClusters' name='nbClusters'
+                            placeholder='Clusters Number' required />
+                        <br />
+                        <label for id='clustering'>Clusters: </label>
+                        <input type='checkbox' id='clustering' onClick="javascript:onClickClustering()" checked />
+                        <br />
+                        <br />
+                        <label for id='miseAEchelle'>Contract : </label>
+                        <input type='checkbox' id='miseAEchelle' name='miseAEchelle' />
+                        <br />
+                        <br />
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                    </div>
+                </form>
+            </div><!-- end col -->
+        </div><!-- end row -->
+    </div><!-- end container -->
+</section><!-- end section -->

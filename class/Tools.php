@@ -1,6 +1,6 @@
 <?php
 
-define('ROOT_FOLDER','/Project_3I013');
+define('ROOT_FOLDER', '/Project_3I013');
 #Fonction pour importer les classes
 function __autoload($className)
 {
@@ -12,18 +12,49 @@ function __autoload($className)
 function debut_html($title)
 {
 	return
-		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML Basic 1.1//EN'
-		  'http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd'>
-			<html xmlns='http://www.w3.org/1999/xhtml' lang='fr'>\n
-				<head>\n
-					<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n
-					<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>\n
-					<script src='".ROOT_FOLDER."/index.js'></script>\n
-					<script src='http://d3js.org/d3.v4.js'></script>\n
-					<title>
-						$title
-					</title>\n
-				</head>";
+		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML Basic 1.1//EN' 'http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd'>
+	<!--[if IE 9]> <html class='no-js ie9 fixed-layout' lang='fr'> <![endif]-->
+	<!--[if gt IE 9]><!-->
+	<html xmlns='http://www.w3.org/1999/xhtml' lang='fr'>
+	<!--<![endif]-->
+
+	<head>
+
+		<!-- Basic -->
+		<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />\n
+
+
+		<!-- Mobile Meta -->
+		<meta name='viewport' content='width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'>
+
+		<!-- Site Meta -->
+		<title>$title</title>
+		<meta name='keywords' content=''>
+		<meta name='description' content=''>
+		<meta name='author' content=''>
+
+		<!-- Site Icons -->
+		<link rel='shortcut icon' href='images/favicon.ico' type='image/x-icon' />
+		<link rel='apple-touch-icon' href='images/apple-touch-icon.png'>
+
+		<!-- Google Fonts -->
+		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600,700' rel='stylesheet'>
+
+		<!-- Custom & Default Styles -->
+		<link rel='stylesheet' href='".ROOT_FOLDER."/css/font-awesome.min.css'>
+		<link rel='stylesheet' href='".ROOT_FOLDER."/css/bootstrap.min.css'>
+		<link rel='stylesheet' href='".ROOT_FOLDER."/css/animate.css'>
+		<link rel='stylesheet' href='".ROOT_FOLDER."/css/carousel.css'>
+		<link rel='stylesheet' href='".ROOT_FOLDER."/style.css'>
+		<script src='".ROOT_FOLDER."/index.js'></script>\n
+		<script src='http://d3js.org/d3.v4.js'></script>\n
+
+		<!--[if lt IE 9]>
+			<script src='".ROOT_FOLDER."/js/vendor/html5shiv.min.js'></script>
+			<script src='".ROOT_FOLDER."/js/vendor/respond.min.js'></script>
+		<![endif]-->
+
+	</head>";
 }
 
 #Fonction d'affichage des Groupes
@@ -51,10 +82,10 @@ function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
 									<div class='" . $alerts[$indice % 2] . "' role='alert' align='left'>
 										<ul class='list-inline'>
 											<li class='list-inline-item'>
-												<h2>".( ($nbClusters==1)?'Liste totale':'Groupe ' . ($indice + 1) ) ."</h2>
+												<h2>".( ($nbClusters==1)?TOTAL_LIST:GROUP.' ' . ($indice + 1) ) ."</h2>
 											</li>
 											<li class='list-inline-item'>
-												<h5>$countGrp " . (($countGrp == 1) ? 'protéine' : 'protéines') . "</h5>
+												<h5>$countGrp " . (($countGrp == 1) ? PROTEIN : PROTEINS) . "</h5>
 											</li>
 											<li class='list-inline-item'>
 													<button type='button'
@@ -136,7 +167,7 @@ function domain_taille_ok($domain, $taille)
 	domain_ok($domain);
 	int_ok($taille);
 	if ($domain->getFirst() > $taille or $domain->getLast() > $taille) {
-		echo "<br/> taille =" . $taille . " domain first =" . $domain->getFirst() . " domain end =" . $domain->getLast() . "<br/>";
+		echo "<br /> taille =" . $taille . " domain first =" . $domain->getFirst() . " domain end =" . $domain->getLast() . "<br />";
 		throw new Exception('Le domaine dépasse la taille de la Protéine !');
 	}
 }
