@@ -25,12 +25,12 @@ function onClick(elem, index) {
 
 
   inputNbProt.setAttribute("value", nbProtPerPage)
-  inputNbProt.setAttribute("onChange", "updateSelector(" + index + ",this.value," + nbProtPerPage + ")")
+  inputNbProt.setAttribute("onChange", "updateSelector(" + index + ",this.value," + proteins.length + ")")
   inputNbProt.min = 1
   inputNbProt.max = proteins.length
   text.innerText = inputNbProt.value + " prot par page - Page 1 sur " + nbPages
 
-  updateSelector(index, inputNbProt.value, nbProtPerPage)
+  updateSelector(index, inputNbProt.value, proteins.length)
 
 
 }

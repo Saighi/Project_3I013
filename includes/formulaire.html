@@ -1,5 +1,6 @@
 <script>
     function onChangeDoDendrogram() {
+        document.getElementById('formulaire').style.display = 'none'
         document.getElementById('loader').style.display = ''
         // Form Data
         var formData = new FormData();
@@ -108,29 +109,33 @@
             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center">
                 <h2>Input your domain architecture file</h2>
                 <p class="lead"></p>
-                <form action='' method='POST' enctype='multipart/form-data'
+                <form class='calculateform' method='POST' enctype='multipart/form-data'
                     onSubmit="document.getElementById('loader').style.display = ''">
-                    <div class="item-box">
+                    <div id = "formulaire" class="item-box">
                         <div class="item-top form-inline">
                             <div class="form-group">
                                 <div class="input-group2">
                                     <span class="input-addon">
                                     </span>
 
-                                    <div class="custom-file">
-                                        <input type='file' id='fichier' name='fichier' onChange="javascript:onChangeDoDendrogram()" required />
-                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <div class="class="file"">
+                                        <input type='file' id='fichier' name='fichier'
+                                            onChange="javascript:onChangeDoDendrogram()" required />
+                                       
                                     </div>
 
                                 </div>
+                                
                             </div>
                             <!--  <input type="submit" name="send" value="search" class="btn btn-default" />-->
                         </div>
                     </div>
                     <div id='my_dataviz'></div>
                     <br />
-                    <div id="loader" class="spinner-grow text-primary" role="status" style="display:none;">
-                    </div>
+                    <button id="loader" class="btn btn-primary" type="button" style='display:none' disabled>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                      </button>
                     <div id='dendrogramLoaded' style='display:none'>
                         <input type='text' class="form-control" id='nbClusters' name='nbClusters'
                             placeholder='Clusters Number' required />

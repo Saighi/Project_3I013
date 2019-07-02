@@ -42,17 +42,18 @@ if (isset($_FILES['fichier'])) {
 
 
 
-    echo "
+    echo "<section class='section lb nopad spotlight style1'>
+
         <div class='content'>
         <br />     
         <iframe name='myframe' id='frame1' src='includes/ExtractExcel.php' style='width:0;height:0;border:0; border:none;'></iframe>
         <form method='POST' action='includes/ExtractExcel.php' target='myframe'>
         <input type='hidden' name='fileProt' value='" . $fileProt . "'/>
-        <label for='name'> ".EXCEL_INPUT." </label>
+        <label for='name'> " . EXCEL_INPUT . " </label>
         <br />
         <input type='text' style = 'width:25%;'  class='form-control' id='name' name='name' value='" . $fileProt . "' required/>
         <input type='hidden' name='nbClusters' value='" . $nbClusters . "'/>
-        <button type='submit' style='width:30%;' class='btn btn-success btn-lg btn-block'>".EXTRACT_EXCEL."</button>
+        <button type='submit' style='width:30%;' class='btn btn-success btn-lg btn-block'>" . EXTRACT_EXCEL . "</button>
         </form>";
     ?>
     <br /> <br />
@@ -63,7 +64,8 @@ if (isset($_FILES['fichier'])) {
     afficher_clusters($clusters, $domainProperties, $miseAEchelle);
 
     #Fin page Affichage de protéines
-    echo "
+    echo "</section>
+
     </div>
     </body></html>";
 } else #Page Formulaire
