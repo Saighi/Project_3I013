@@ -42,10 +42,11 @@ if (isset($_FILES['fichier'])) {
 
 
 
-    echo "<section class='section lb nopad spotlight style1'>
+    echo "		<section class='section overfree'>
 
-        <div class='content'>
-        <br />     
+
+    <div class='container'>
+    <br />     
         <iframe name='myframe' id='frame1' src='includes/ExtractExcel.php' style='width:0;height:0;border:0; border:none;'></iframe>
         <form method='POST' action='includes/ExtractExcel.php' target='myframe'>
         <input type='hidden' name='fileProt' value='" . $fileProt . "'/>
@@ -64,9 +65,10 @@ if (isset($_FILES['fichier'])) {
     afficher_clusters($clusters, $domainProperties, $miseAEchelle);
 
     #Fin page Affichage de protéines
-    echo "</section>
+    echo "</div>
+    </section>
 
-    </div>
+    
     </body></html>";
 } else #Page Formulaire
 {
