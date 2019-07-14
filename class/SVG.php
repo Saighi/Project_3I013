@@ -54,8 +54,8 @@ abstract class SVG
         }
 
 
-        $svg = '<th>.' . $proteine->getId() . "</th>\n"
-            . "<td><svg height='84' width='" . ($taille + 20) . "'>\n"
+        $svg = '<th>' . $proteine->getId() . "<br /><br />\n"
+            . "<svg height='84' width='" . ($taille + 20) . "'>\n"
             . "<line x1='10' y1='42' x2='" . ($taille - 10) . "' y2='42' style='stroke:black;stroke-width:2'/>\n";
 
         //$svg .= "<rect width='" . $taille . "' height='60' style='fill:rgb(0,0,0);stroke-width:3' fill-opacity='0.1'/>\n";
@@ -85,7 +85,7 @@ abstract class SVG
             //x domaine commence
             //width (domaine fini - domaine commence)
         }
-        $svg .= '</svg></td>';
+        $svg .= '</svg></th>';
         echo $svg;
     }
 

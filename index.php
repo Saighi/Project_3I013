@@ -31,7 +31,7 @@ if (isset($_FILES['fichier'])) {
 
     $title = TITLE_SHOW;
     echo debut_html($title);
-    echo "<body style='background-color:#F0F8FF'>\n";
+    echo "<body style='background-color:white'>\n";
 
     include('includes/navbar.html');
 
@@ -79,7 +79,7 @@ if (isset($_FILES['fichier'])) {
 
     ?>
 
-    <body style="background-color:#F0F8FF">
+    <body style="background-color:white">
         <?php
         include('includes/navbar.html');
         ?>
