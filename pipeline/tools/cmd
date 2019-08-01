@@ -1,0 +1,20 @@
+depuis (tools/script)
+
+ensemble des domains potentiels:
+../hmmer-3.2/bin/hmmscan --domtblout ../../sequences/output ../../database/Pfam-A.hmm ../../sequences/Pfalciparum3D7_AnnotatedProteins_test.fasta
+
+
+script conversion domains potentiel en domains:
+perl ../DAMA/scripts/convertHmmscanOutput.pl -hmmscanFile ../../sequences/output  -outputFile ../../domain/output
+
+format dama :
+../DAMA/Release/src/DAMA -domainsHitFile ../../domain/output -knownArchFile ../../database/pfam32/pfam.knownArch.txt -outputFile ../../domain/output.dama -domainsInfoFile ../DAMA/database/pfam32/pfam.domains
+
+commande finale:
+
+python3 main* settings.txt sample.txt archs.txt perl
+
+
+
+
+

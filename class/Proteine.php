@@ -38,7 +38,18 @@ class Proteine
         return $this->taille;
     }
 
+    public function getCompactSize()
+    {
+        $myFile = "pfam27DomainName.txt";
+        preg_match_all('/(.*)\t(.*)/', trim(file_get_contents($myFile)), $items);
+        $quest = array_combine($items[1], $items[2]);
 
+        $size=0;
+        foreach($this->domains as $domain) {
+            $size += strlen($quest[$domain->getID()]) * 15;
+        }
+        return $size;
+    }
 
     
     public function addDomain($domain)

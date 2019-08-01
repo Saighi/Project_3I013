@@ -1,0 +1,9 @@
+PATH_REPERTORY:/opt/lampp/htdocs/Domain-Architecture-Viewer/pipeline
+PATH_HMMER:/tools/hmmer-3.2.1/bin/
+PATH_USERSFILES:/usersFiles/
+PATH_SAMPLES:/samples/
+PATH_DATABASE:/database/
+PATH_DAMA:/tools/DAMA/
+PATH_PERLLIB:/tools/perlLib/
+PATH_TOOLS:/tools/
+NULL:NULL

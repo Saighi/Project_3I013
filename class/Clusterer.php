@@ -13,8 +13,8 @@ class Clusterer
 
     public function __construct($proteins, $nbClasses)
     {
-        $this->nbClasses=$nbClasses;
-        $this->proteins=$proteins;
+        $this->nbClasses = $nbClasses;
+        $this->proteins = $proteins;
         $this->setMatrixDistance($proteins);
         $this->makeHierarchicClusters();
         $this->clusters0rderer($this->clusters);
@@ -26,9 +26,9 @@ class Clusterer
         # $classe  : Array de Protéines
         foreach ($this->proteins as $i) {
             $classes[][] = $i;
-            $classesImbrique[][]= $i;
+            $classesImbrique[][] = $i;
         }
-        while (count($classes) > 1) {   
+        while (count($classes) > 1) {
             # Calcul des dissimilarités entre classes dans une matrice triangulaire supérieure
             $classesLength = count($classes);
             # $matDissim : Matrice = ($classesLength * $classesLength)
@@ -54,50 +54,44 @@ class Clusterer
             foreach ($classes[$j] as $element) {
                 $classes[$i][] = $element;
             }
-            $classesImbrique[$i][]=$classesImbrique[$j];
+            $classesImbrique[$i][] = $classesImbrique[$j];
             array_splice($classes, $j, 1);
             array_splice($classesImbrique, $j, 1);
         }
         #classesJson est un tableau compatible avec le format json adapté à d3
-        $classesJson= $this->recursivClasses(1,$classesImbrique,0);
-        file_put_contents('data/dendrograms/'.$filename.'.json',json_encode($classesJson));
+        $classesJson = $this->recursivClasses(1, $classesImbrique, 0);
+        file_put_contents('data/dendrograms/' . $filename . '.json', json_encode($classesJson));
     }
-    
-    
-    private function recursivClasses($level,$classesImbrique,$id){
 
-        if ($level==1){
 
-            $classesJson["name"]="node".$id;
-     
-            foreach($classesImbrique as $element){
-                $id+=1;
-                if(gettype($element)=="array"){
-                    $classesJson["children"][]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1),"children"=> $this->recursivClasses(($level+1),$element,$id));
-                }else{
-                    $classesJson["children"][]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1));
+    private function recursivClasses($level, $classesImbrique, $id)
+    {
+
+        if ($level == 1) {
+
+            $classesJson["name"] = "node" . $id;
+
+            foreach ($classesImbrique as $element) {
+                $id += 1;
+                if (gettype($element) == "array") {
+                    $classesJson["children"][] = array("name" => "node" . $id . ($level + 1), "colname" => "level" . ($level + 1), "children" => $this->recursivClasses(($level + 1), $element, $id));
+                } else {
+                    $classesJson["children"][] = array("name" => "node" . $id . ($level + 1), "colname" => "level" . ($level + 1));
                 }
             }
             return $classesJson;
-       
-        }
-        else{
-            $classesJson=array();
-            foreach($classesImbrique as $element){
-                $id+=1;
-                if(gettype($element)=="array"){
-                    $classesJson[]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1),"children"=> $this->recursivClasses(($level+1),$element,$id));
-                }
-                else{
-                    $classesJson[]=array("name"=>"node".$id.($level+1),"colname"=>"level".($level+1));
+        } else {
+            $classesJson = array();
+            foreach ($classesImbrique as $element) {
+                $id += 1;
+                if (gettype($element) == "array") {
+                    $classesJson[] = array("name" => "node" . $id . ($level + 1), "colname" => "level" . ($level + 1), "children" => $this->recursivClasses(($level + 1), $element, $id));
+                } else {
+                    $classesJson[] = array("name" => "node" . $id . ($level + 1), "colname" => "level" . ($level + 1));
                 }
             }
             return $classesJson;
-         
         }
-        
-
-
     }
     # crée nos clusters, contient la traduction en php du pseudocode 
     # que l'on trouve à cette adresse : https://fr.wikipedia.org/wiki/Regroupement_hi%C3%A9rarchique
@@ -169,7 +163,7 @@ class Clusterer
             unset($this->clusters[$keyCluster]);
         }
 
-        $this->clusters=$classesTri;
+        $this->clusters = $classesTri;
     }
 
 
@@ -203,7 +197,7 @@ class Clusterer
             }
         }
     }
-    
+
     # Cette fonction nous donne la distance entre cluster.
     private function dissim($classe1, $classe2)
     {
@@ -211,18 +205,18 @@ class Clusterer
         if (count($classe1) == count($classe2) && count($classe1) == 1) {
             return $this->matrixDistance[$classe1[0]->getId()][$classe2[0]->getId()];
         } else
-            #Si les classes ont plusieurs proteines : nous calculons la distance par la moyenne des distances entre les proteines
-            {
-                $sum = 0;
-                $nbLinks = count($classe1) * count($classe2);
-                foreach ($classe1 as $prot1) {
-                    foreach ($classe2 as $prot2) {
-                        $sum += $this->matrixDistance[$prot1->getId()][$prot2->getId()];
-                    }
+        #Si les classes ont plusieurs proteines : nous calculons la distance par la moyenne des distances entre les proteines
+        {
+            $sum = 0;
+            $nbLinks = count($classe1) * count($classe2);
+            foreach ($classe1 as $prot1) {
+                foreach ($classe2 as $prot2) {
+                    $sum += $this->matrixDistance[$prot1->getId()][$prot2->getId()];
                 }
-
-                return $sum / $nbLinks;
             }
+
+            return $sum / $nbLinks;
+        }
     }
 
     # Mesure de distance entre deux protéines, contient la traduction en php 

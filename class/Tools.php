@@ -50,6 +50,9 @@ function debut_html($title)
 		<script src='http://d3js.org/d3.v4.js'></script>\n
 
 
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+		<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>
+
 		<!--[if lt IE 9]>
 			<script src='".ROOT_FOLDER."/js/vendor/html5shiv.min.js'></script>
 			<script src='".ROOT_FOLDER."/js/vendor/respond.min.js'></script>
@@ -58,13 +61,13 @@ function debut_html($title)
 	</head>";
 }
 
-#Fonction d'affichage des Groupes
+#Normal View Fonction d'affichage des Groupes
 function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
 {
 	#Pour alterner couleurs des entêtes de Groupe
 	$alerts = ['alert alert-success', 'alert alert-info'];
 	#Initialiser la définition des propriétés graphiques SVG
-	SVG::setDefs($domainsProperties);
+	//SVG::setDefs($domainsProperties);
 
 	#Affichage du Tableau Clusters
 	echo "<table class='table table-hover'>";
@@ -120,6 +123,56 @@ function afficher_clusters($clusters, $domainsProperties, $miseAEchelle)
 			if ($indice == (count($groupe) - 1)) {
 				echo "</tbody>";
 			}
+		}
+		#fin du groupe
+		echo '</tbody>';
+	}
+	#fin du tableau clusters
+	echo '</table>';
+}
+
+// Compact View
+#Fonction d'affichage des Groupes
+function afficher_clusters_compact($clusters, $domainsProperties, $miseAEchelle)
+{
+	#Pour alterner couleurs des entêtes de Groupe
+	$alerts = ['alert alert-success', 'alert alert-info'];
+	#Initialiser la définition des propriétés graphiques SVG
+//	SVG::setDefs($domainsProperties);
+
+	#Affichage du Tableau Clusters
+	echo "<table class='table table-hover'>";
+	#On parcourt les groupes
+	$nbClusters= count($clusters);
+	foreach ($clusters as $indice => $groupe) {
+		$countGrp = count($groupe);
+		/* Entête du Groupe :
+			Liste Totale (si un unique cluster) | Groupe {numéro}
+			{nombre} Protéine(s)
+			{Boutton {Show More | Hidden } }
+		*/
+		echo "<tbody class='cluster'>
+							<thead>
+								<td colspan='2'>
+									<div class='" . $alerts[$indice%2] . "' role='alert' align='left'>
+										<ul class='list-inline'>
+											<li class='list-inline-item'>
+												<h2>".( ($nbClusters==1)?TOTAL_LIST:GROUP.' ' . ($indice + 1) ) ."</h2>
+											</li>
+											<li class='list-inline-item'>
+												<h5>$countGrp " . (($countGrp == 1) ? PROTEIN : PROTEINS) . "</h5>
+											</li>
+										</ul>
+									</div>
+									</td>
+							</thead>";
+		#On parcourt les Protéines du Groupe
+		foreach ($groupe as $indice => $prot) {
+			#On affiche une ligne du Table représentant la protéine
+			//echo ($indice == 0) ? '<tr style="outline: medium solid">' : '<tr>'; #mettre bordure si premiere protéine
+			echo '<tr>';
+			SVG::show_compact($prot, $domainsProperties, $miseAEchelle);
+			echo '</tr>';
 		}
 		#fin du groupe
 		echo '</tbody>';
