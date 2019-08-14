@@ -41,6 +41,11 @@ if (isset($_FILES['fichier'])) {
     #$clusters = un Tableau contenant des Groupes (tableaux) de Protéines.
     $clusters = $clusterer->getClusters();
 
+    //Statistiques
+    $stats = new Statistics($clusters);
+    ?>
+
+<?php
 
     SVG::setDefs($domainProperties);
     echo "		<section class='section overfree'>
@@ -73,8 +78,24 @@ echo "
 echo "      </div>
     <div id='menu2' class='tab-pane fade'>
       <h3>".STATISTICS."</h3>
-      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    </div>
+      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>";
+    echo "<h3>Groups <b>".$stats->getNbGroups()."</b> <br />";
+    echo "Sequences <b>".$stats->getNbSequences()."</b> <br />";
+    echo "Mean of domain Per protein    <b>".$stats->getDomainPerProtein()."</b></h3> <br />";
+
+
+    echo "<h3>Histogram size of architectures</h3>  <br />";
+    $stats->doHistogram();
+    
+
+    echo "<h3>Most seen domains (Top 20)</h3> <br />";
+    $stats->doTop20Domains();
+   
+   // echo "Most Seen architectures (Top 20) <br />";
+    $stats->doTop20Archs($domainProperties);
+  
+    echo "
+      </div>
     
     <div id='menu3' class='tab-pane fade'>
       <h3>".EXPORT."</h3>

@@ -181,6 +181,53 @@ function afficher_clusters_compact($clusters, $domainsProperties, $miseAEchelle)
 	echo '</table>';
 }
 
+
+
+function afficher_top20_archs($top20archs, $domainsProperties)
+{
+	#Pour alterner couleurs des entêtes de Groupe
+	$alerts = 'alert alert-info';
+	#Initialiser la définition des propriétés graphiques SVG
+//	SVG::setDefs($domainsProperties);
+
+	#Affichage du Tableau Clusters
+	echo "<table class='table table-hover'>";
+	#On parcourt les groupes
+		/* Entête du Groupe :
+			Liste Totale (si un unique cluster) | Groupe {numéro}
+			{nombre} Protéine(s)
+			{Boutton {Show More | Hidden } }
+		*/
+		echo "<tbody class='cluster'>
+							<thead>
+								<td colspan='2'>
+									<div class='" . $alerts[0] . "' role='alert' align='left'>
+										<ul class='list-inline'>
+											<li class='list-inline-item'>
+												<h2>Most seen architecture</h2>
+											</li>
+											<li class='list-inline-item'>
+												<h5>TOP 20</h5>
+											</li>
+										</ul>
+									</div>
+									</td>
+							</thead>";
+		#On parcourt les Protéines du Groupe
+		foreach ($top20archs as $arch) {
+			#On affiche une ligne du Table représentant la protéine
+			//echo ($indice == 0) ? '<tr style="outline: medium solid">' : '<tr>'; #mettre bordure si premiere protéine
+			echo '<tr>';
+			SVG::show_arch($arch, $domainsProperties, false);
+			echo '</tr>';
+		}
+		#fin du groupe
+		echo '</tbody>';
+	
+	#fin du tableau clusters
+	echo '</table>';
+}
+
 #Fonction pour enregistrer le fichier dans le serveur
 function upload_file($file)
 {
